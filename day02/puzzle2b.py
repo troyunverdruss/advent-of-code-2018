@@ -48,7 +48,6 @@ def run_puzzle(entries):
     raise Exception('Could not find a single answer!')
 
 
-
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     result = run_puzzle(entries)
