@@ -34,37 +34,63 @@ def parse_entries(raw_entries):
     return claims
 
 
-def add_reservation(cloth, left, top):
+def add_reservation(cloth, id, left, top):
     if left in cloth:
         if top in cloth[left]:
             cloth[left][top] = True
         else:
-            cloth[left][top] = False
+            cloth[left][top] = id
     else:
         cloth[left] = {}
-        cloth[left][top] = False
+        cloth[left][top] = id
 
 
-def run_puzzle(raw_entries):
-    claims = parse_entries(raw_entries)
-
+def setup_cloth(claims):
     cloth = {}
-    overlapping = 0
-
     for c in claims:
         for left in range(c.left, c.left + c.width):
             for top in range(c.top, c.top + c.height):
-                add_reservation(cloth, left, top)
+                add_reservation(cloth, c.id, left, top)
+    return cloth
 
+
+def find_overlapping_square_inches(raw_entries):
+    claims = parse_entries(raw_entries)
+    cloth = setup_cloth(claims)
+
+    overlapping = 0
     for x in cloth.keys():
         for y in cloth[x].keys():
-            if cloth[x][y]:
+            if isinstance(cloth[x][y], bool) and cloth[x][y]:
                 overlapping += 1
 
     return overlapping
 
 
+def find_intact_claim(raw_entries):
+    claims = parse_entries(raw_entries)
+    cloth = setup_cloth(claims)
+
+    id_without_overlap = None
+
+    for c in claims:
+        did_overlap = False
+
+        for left in range(c.left, c.left + c.width):
+            for top in range(c.top, c.top + c.height):
+                if cloth[left][top] != c.id:
+                    did_overlap = True
+                    break
+
+        if not did_overlap:
+            id_without_overlap = c.id
+
+    return id_without_overlap
+
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
-    result = run_puzzle(entries)
-    print('Found overlapping square inches: {}'.format(result))
+    overlapping_square_inches = find_overlapping_square_inches(entries)
+    print('3a: Found overlapping square inches: {}'.format(overlapping_square_inches))
+
+    id_without_overlap = find_intact_claim(entries)
+    print('3b: Found intact claim: {}'.format(id_without_overlap))
