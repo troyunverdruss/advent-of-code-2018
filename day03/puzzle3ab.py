@@ -87,6 +87,7 @@ def find_intact_claim(raw_entries):
 
     return id_without_overlap
 
+
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     overlapping_square_inches = find_overlapping_square_inches(entries)
