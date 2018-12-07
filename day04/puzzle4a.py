@@ -86,15 +86,6 @@ def process_shifts(entries):
     return shifts
 
 
-def solve_puzzle(entries):
-    shifts = process_shifts(entries)
-
-    guard_id, mins_asleep = find_most_sleepy_guard(shifts)
-    sleepiest_min = find_sleepiest_minute(guard_id, shifts)
-
-    return guard_id, sleepiest_min
-
-
 def find_most_sleepy_guard(shifts):
     mins_asleep = {}
     for shift in shifts:
@@ -106,7 +97,7 @@ def find_most_sleepy_guard(shifts):
     return guard_id, mins_asleep[guard_id]
 
 
-def find_sleepiest_minute(guard_id, shifts):
+def find_sleepiest_minute_with_count(guard_id, shifts):
     all_mins = []
 
     for shift in shifts:
@@ -116,11 +107,49 @@ def find_sleepiest_minute(guard_id, shifts):
         all_mins += shift.list_of_mins()
 
     data = Counter(all_mins)
-    return data.most_common(1)[0][0]
+    if len(all_mins) == 0:
+        return (0, 0)
+
+    return data.most_common(1)[0]
+
+
+def find_sleepiest_minute(guard_id, shifts):
+    return find_sleepiest_minute_with_count(guard_id, shifts)[0]
+
+
+def solve_puzzle_4a(entries):
+    shifts = process_shifts(entries)
+
+    guard_id, mins_asleep = find_most_sleepy_guard(shifts)
+    sleepiest_min = find_sleepiest_minute(guard_id, shifts)
+
+    return guard_id, sleepiest_min
+
+
+def solve_puzzle_4b(entries):
+    shifts = process_shifts(entries)
+    guards = set(map(lambda s: s.guard_id, shifts))
+
+    guard_id = 0
+    minute = None
+    count = 0
+
+    for guard in guards:
+        min_with_count = find_sleepiest_minute_with_count(guard, shifts)
+        if min_with_count[1] > count:
+            guard_id = guard
+            minute = min_with_count[0]
+            count = min_with_count[1]
+
+    return guard_id, minute
 
 
 if __name__ == '__main__':
     entries = read_raw_entries('input-sorted.txt')
-    guard_id, sleepiest_min = solve_puzzle(entries)
-
+    guard_id, sleepiest_min = solve_puzzle_4a(entries)
     print('Guard ID: {}, sleepiest min: {}, checksum: {}'.format(guard_id, sleepiest_min, guard_id * sleepiest_min))
+
+    entries = read_raw_entries('input-sorted.txt')
+    guard_id, minute = solve_puzzle_4b(entries)
+    print('Guard ID: {}, sleepiest min: {}, checksum: {}'.format(guard_id, minute, guard_id * minute))
+

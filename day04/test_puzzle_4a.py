@@ -1,6 +1,6 @@
 from unittest import TestCase
 from helpers.helpers import read_raw_entries
-from day04.puzzle4a import process_shifts, find_most_sleepy_guard, find_sleepiest_minute, solve_puzzle
+from day04.puzzle4a import process_shifts, find_most_sleepy_guard, find_sleepiest_minute, solve_puzzle_4a, solve_puzzle_4b
 import datetime
 
 
@@ -45,11 +45,14 @@ class TestProcess_shifts(TestCase):
 
         self.assertEqual(24, min)
 
-    def test_solve_puzzle(self):
+    def test_solve_puzzle_4a(self):
         entries = read_raw_entries('test-input.txt')
 
-        guard_id, sleepiest_min = solve_puzzle(entries)
+        guard_id, sleepiest_min = solve_puzzle_4a(entries)
         self.assertEqual(240, guard_id * sleepiest_min)
 
-
+    def test_solve_puzzle_4b(self):
+        entries = read_raw_entries('test-input.txt')
+        guard_id, most_asleep_min = solve_puzzle_4b(entries)
+        self.assertEqual(4455, guard_id * most_asleep_min)
 
