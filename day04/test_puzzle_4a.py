@@ -1,6 +1,6 @@
 from unittest import TestCase
 from helpers.helpers import read_raw_entries
-from day04.puzzle4a import process_shifts, find_most_sleepy_guard, find_sleepiest_minute, solve_puzzle_4a, solve_puzzle_4b
+from day04.puzzle4ab import process_shifts, find_most_sleepy_guard, find_sleepiest_minute, solve_puzzle_4a, solve_puzzle_4b
 import datetime
 
 
