@@ -1,5 +1,5 @@
 from unittest import TestCase
-from day06.puzzle6a import solve_6a, convert_points, manhattan_distance
+from day06.puzzle6a import solve_6a, convert_points, manhattan_distance, solve_6b
 from helpers.helpers import read_raw_entries
 
 
@@ -10,6 +10,13 @@ class TestSolve_6a(TestCase):
 
         r = solve_6a(points)
         self.assertEqual(17, r)
+
+    def test_solve_6b(self):
+        entries = read_raw_entries('test-input.txt')
+        points = convert_points(entries)
+
+        r = solve_6b(points, 32)
+        self.assertEqual(16, r)
 
     def test_convert_points(self):
         entries = ['1, 2', '3, 4']
