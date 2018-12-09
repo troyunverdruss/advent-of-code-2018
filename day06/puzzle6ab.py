@@ -1,6 +1,4 @@
-import string
 from helpers.helpers import read_raw_entries
-import re
 from typing import List
 
 
@@ -146,6 +144,7 @@ def solve_6b(points, threshold):
 
     return total_size
 
+
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     points = convert_points(entries)
@@ -160,4 +159,3 @@ if __name__ == '__main__':
     r = solve_6b(points, 10000)
 
     print('Largest size: {}'.format(r))
-
