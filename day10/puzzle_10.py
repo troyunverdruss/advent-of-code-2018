@@ -28,9 +28,6 @@ class Star:
 
         return False
 
-
-
-
     def __repr__(self):
         return repr('Pos: ({}, {}), Vel: ({}, {})'.format(self.x, self.y, self.x_vel, self.y_vel))
 
@@ -46,7 +43,6 @@ def read_stars(input: str):
 
         x, y = matcher.group(1).split(',')
         x_vel, y_vel = matcher.group(2).split(',')
-
 
         stars.append(Star(x=int(x), y=int(y), x_vel=int(x_vel), y_vel=int(y_vel)))
 
@@ -99,8 +95,6 @@ def solve_10(stars: List[Star]):
                 lone_stars += 1
                 if lone_stars > lone_star_threshold:
                     break
-
-
 
         if run and (neighbor_count / len(stars) > 0.5):
             print(time)
