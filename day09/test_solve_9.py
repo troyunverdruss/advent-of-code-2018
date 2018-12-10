@@ -1,5 +1,7 @@
-from unittest import TestCase
-from day09.puzzle_9 import solve_9, Circle
+from unittest import TestCase, skip
+from day09.puzzle_9 import solve_9, DoubleLinkedListCircle, solve_9_with_deque
+from helpers.helpers import read_raw_entries
+import timeit
 
 
 class TestSolve9(TestCase):
@@ -68,6 +70,24 @@ class TestSolve9(TestCase):
 
         return new_active
 
+    @skip
+    def test_perf(self):
+        t = timeit.timeit(self.run_python_dll, number=10)
+        print('Linked List took: {}'.format(t))
+
+        t = timeit.timeit(self.run_python_deque, number=10)
+        print('Deque took: {}'.format(t))
+
+
+    def run_python_dll(self):
+        input = read_raw_entries('input.txt')[0].strip()
+        solve_9(input, 100)
+
+    def run_python_deque(self):
+        input = read_raw_entries('input.txt')[0].strip()
+        solve_9_with_deque(input, 100)
+
+    @skip
     def test_board_matches(self):
         expected_board_entries = [
             '(0) ',
@@ -98,7 +118,7 @@ class TestSolve9(TestCase):
             '(25) 10 21 5 22 11 1 12 6 13 3 14 7 15 0 16 8 17 4 18 19 2 24 20 ',
         ]
 
-        circle = Circle()
+        circle = DoubleLinkedListCircle()
         marble_value = 1
 
         while marble_value <= 25:
