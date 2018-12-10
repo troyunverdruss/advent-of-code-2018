@@ -1,6 +1,7 @@
 from helpers.helpers import read_raw_entries
 from typing import List, Dict, Tuple
 import re
+from collections import deque
 
 
 class Marble:
@@ -13,7 +14,7 @@ class Marble:
         return repr(self.value)
 
 
-class Circle:
+class DoubleLinkedListCircle:
     def __init__(self):
         self.active_marble = Marble(value=0)
         self.active_marble.prev = self.active_marble
@@ -52,6 +53,25 @@ class Circle:
         return score, string_version_of_board
 
 
+class DequeCircle:
+    def __init__(self):
+        self.deque = deque([0])
+
+    def add_marble(self, marble_value: int, compute_board_str=False) -> Tuple[int, str]:
+        score = 0
+        if marble_value % 23 == 0:
+            score += marble_value
+
+            self.deque.rotate(7)
+            score += self.deque.pop()
+            self.deque.rotate(-1)
+
+        else:
+            self.deque.rotate(-1)
+            self.deque.append(marble_value)
+
+        return score, ''
+
 def parse_params(input: str) -> Tuple[int, int]:
     p = re.compile(r'(\d+) players; last marble is worth (\d+) points')
     matcher = p.match(input)
@@ -70,7 +90,25 @@ def solve_9(input: str, multiplier: int = 1):
     for i in range(0, player_count):
         scores.append(0)
 
-    circle = Circle()
+    circle = DoubleLinkedListCircle()
+
+    marble_value = 1
+    while marble_value <= last_marble_value:
+        score, string_rep = circle.add_marble(marble_value)
+        scores[(marble_value - 1) % player_count] += score
+        marble_value += 1
+
+    return max(scores)
+
+def solve_9_with_deque(input: str, multiplier: int = 1):
+    player_count, last_marble_value = parse_params(input)
+    last_marble_value *= multiplier
+
+    scores: List[int] = []
+    for i in range(0, player_count):
+        scores.append(0)
+
+    circle = DequeCircle()
 
     marble_value = 1
     while marble_value <= last_marble_value:
