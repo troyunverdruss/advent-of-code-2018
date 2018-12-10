@@ -1,43 +1,55 @@
 from helpers.helpers import read_raw_entries
 from typing import List, Dict, Tuple
 import re
-import sys
+
+
+class Marble:
+    def __init__(self, prev=None, next=None, value=None):
+        self.prev = prev
+        self.next = next
+        self.value = value
+
+    def __repr__(self):
+        return repr(self.value)
 
 
 class Circle:
     def __init__(self):
-        self.active_marble: int = 0
-        self.circle: List[int] = [0]
+        self.active_marble = Marble(value=0)
+        self.active_marble.prev = self.active_marble
+        self.active_marble.next = self.active_marble
 
-    def add_marble(self, marble_value: int) -> Tuple[int, str]:
+    def add_marble(self, marble_value: int, compute_board_str=False) -> Tuple[int, str]:
         score = 0
         if marble_value % 23 == 0:
             score += marble_value
 
-            marble_to_remove = (self.active_marble - 7) % len(self.circle)
-            score += self.circle.pop(marble_to_remove)
-            self.active_marble = marble_to_remove
+            for i in range(0, 7):
+                self.active_marble = self.active_marble.prev
+
+            score += self.active_marble.value
+            self.active_marble.prev.next = self.active_marble.next
+            self.active_marble.next.prev = self.active_marble.prev
+            self.active_marble = self.active_marble.next
+
         else:
-            if len(self.circle) == 1:
-                self.circle.append(marble_value)
-                self.active_marble = 1
-            else:
-                insert_index = (self.active_marble + 1) % len(self.circle) + 1
-                self.circle.insert(insert_index, marble_value)
-                self.active_marble = insert_index
+            self.active_marble = self.active_marble.next
 
-        # string_version_of_board = ''
-        # for i in range(0, len(self.circle)):
-        #     if i == self.active_marble:
-        #         string_version_of_board += '({}) '.format(self.circle[i])
-        #         # print('({}) '.format(self.circle[i]), end='')
-        #     else:
-        #         string_version_of_board += '{} '.format(self.circle[i])
-        #         # print('{} '.format(self.circle[i]), end='')
-        # print('')
-        # sys.stdout.flush()
+            new_marble = Marble(prev=self.active_marble, next=self.active_marble.next, value=marble_value)
+            self.active_marble.next.prev = new_marble
+            self.active_marble.next = new_marble
+            self.active_marble = new_marble
 
-        return score, None
+        # This is an optional view of the board, mostly for debugging
+        string_version_of_board = ''
+        if compute_board_str:
+            string_version_of_board = '({}) '.format(self.active_marble.value)
+            curr = self.active_marble
+            while curr.next != self.active_marble:
+                curr = curr.next
+                string_version_of_board += '{} '.format(curr.value)
+
+        return score, string_version_of_board
 
 
 def parse_params(input: str) -> Tuple[int, int]:
@@ -50,8 +62,9 @@ def parse_params(input: str) -> Tuple[int, int]:
     return int(matcher.group(1)), int(matcher.group(2))
 
 
-def solve_9a(input: str):
+def solve_9(input: str, multiplier: int = 1):
     player_count, last_marble_value = parse_params(input)
+    last_marble_value *= multiplier
 
     scores: List[int] = []
     for i in range(0, player_count):
@@ -60,15 +73,9 @@ def solve_9a(input: str):
     circle = Circle()
 
     marble_value = 1
-
     while marble_value <= last_marble_value:
-        # print('Player number: {}, index: {}'.format((marble_value - 1) % player_count + 1,
-        #                                             (marble_value - 1) % player_count))
-
         score, string_rep = circle.add_marble(marble_value)
-
         scores[(marble_value - 1) % player_count] += score
-
         marble_value += 1
 
     return max(scores)
@@ -76,5 +83,9 @@ def solve_9a(input: str):
 
 if __name__ == '__main__':
     input = read_raw_entries('input.txt')[0].strip()
-    r = solve_9a(input)
-    print('Winning score: {}'.format(r))
+    r = solve_9(input, 1)
+    print('9a. Winning score: {}'.format(r))
+
+    input = read_raw_entries('input.txt')[0].strip()
+    r = solve_9(input, 100)
+    print('9b. Winning score: {}'.format(r))
