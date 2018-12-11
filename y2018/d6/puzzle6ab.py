@@ -1,12 +1,5 @@
-from helpers.helpers import read_raw_entries
+from helpers.helpers import read_raw_entries, manhattan_distance, Point
 from typing import List
-
-
-class Point:
-    def __init__(self):
-        self.id = None
-        self.x = None
-        self.y = None
 
 
 class GridCell:
@@ -65,23 +58,6 @@ def convert_points(entries: List[str]) -> List[Point]:
         i += 1
 
     return points
-
-
-def manhattan_distance(a: Point, b: Point) -> int:
-    x_dist = 0
-    y_dist = 0
-
-    if a.x <= b.x:
-        x_dist = b.x - a.x
-    else:
-        x_dist = a.x - b.x
-
-    if a.y <= b.y:
-        y_dist = b.y - a.y
-    else:
-        y_dist = a.y - b.y
-
-    return x_dist + y_dist
 
 
 def setup_grid(points):

@@ -14,3 +14,20 @@ def read_raw_entries(input):
             entries.append(line.strip())
 
     return entries
+
+
+class Point:
+    def __init__(self, x=None, y=None, id=None):
+        self.id = id
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        self.x += other.x
+        self.y += other.y
+        return self
+
+
+
+def manhattan_distance(a: Point, b: Point) -> int:
+    return abs(a.x - b.x) + abs(a.y - b.y)
