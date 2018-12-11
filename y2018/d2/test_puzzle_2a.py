@@ -1,5 +1,5 @@
 from unittest import TestCase
-from y2018.day02.puzzle2a import analyze, run_puzzle
+from y2018.d2.puzzle2a import analyze, run_puzzle
 
 
 class TestAnalyze(TestCase):
