@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from y2018.day01.puzzle01b import run_puzzle
+from y2018.d1.puzzle01b import run_puzzle
 
 
 class TestPuzzle(TestCase):

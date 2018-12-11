@@ -1,5 +1,5 @@
 from unittest import TestCase
-from y2018.day06 import solve_6a, convert_points, manhattan_distance, solve_6b
+from y2018.d6 import solve_6a, convert_points, manhattan_distance, solve_6b
 from helpers.helpers import read_raw_entries
 
 

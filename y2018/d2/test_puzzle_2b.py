@@ -1,5 +1,5 @@
 from unittest import TestCase
-from y2018.day02.puzzle2b import diff_count, get_common, is_diff_one, run_puzzle
+from y2018.d2.puzzle2b import diff_count, get_common, is_diff_one, run_puzzle
 
 
 class TestDiff_count(TestCase):
