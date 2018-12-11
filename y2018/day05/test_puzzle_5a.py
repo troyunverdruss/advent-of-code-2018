@@ -1,6 +1,6 @@
 from unittest import TestCase
 from helpers.helpers import read_raw_entries
-from day05.puzzle5ab import solve_5a, solve_5b, solve_try_1
+from y2018.day05.puzzle5ab import solve_5a, solve_5b, solve_try_1
 import timeit
 
 class TestSolve_5a(TestCase):
