@@ -1,7 +1,6 @@
 from unittest import TestCase
 from helpers.helpers import read_raw_entries
-from day07.puzzle_7ab import process_into_steps, solve_7a, solve_7b
-from typing import List
+from y2018.day07.puzzle_7ab import process_into_steps, solve_7a, solve_7b
 
 
 class TestSolve_7a(TestCase):

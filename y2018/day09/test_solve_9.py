@@ -1,5 +1,5 @@
 from unittest import TestCase, skip
-from day09.puzzle_9 import solve_9, DoubleLinkedListCircle, solve_9_with_deque
+from y2018.day09.puzzle_9 import solve_9, DoubleLinkedListCircle, solve_9_with_deque
 from helpers.helpers import read_raw_entries
 import timeit
 
