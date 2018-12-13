@@ -43,7 +43,7 @@ def solve_12(entries):
             rules[m.group(1).strip()] = m.group(2).strip()
 
     last_sum = 0
-    for i in range(500):
+    for i in range(110):
         padleft(pots, 3)
         padright(pots, 3)
         next = {}
@@ -65,14 +65,17 @@ def solve_12(entries):
             if p.value == '#':
                 sum += p.id
 
-        print('gen: {} sum: {}, last sum: {}, diff: {}'.format(i+1, sum, last_sum, sum - last_sum))
+        print('gen: {} sum: {}, last sum: {}, diff: {}'.format(i + 1, sum, last_sum, sum - last_sum))
         last_sum = sum
 
-
-
     return sum
+
 
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     r = solve_12(entries)
     print(r)
+
+    # Correct answers
+    # Gen 20 sum: 3738
+    # Gen 110 sum: 11047
