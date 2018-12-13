@@ -99,7 +99,6 @@ def process_input(entries) -> Tuple[deque, Dict[Tuple, bool]]:
 
     for k, v in rules.items():
         print(k, v)
-    exit()
 
     return state, rules
 
