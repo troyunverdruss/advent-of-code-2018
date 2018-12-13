@@ -7,11 +7,14 @@ def read_numeric_entries(input):
     return entries
 
 
-def read_raw_entries(input):
+def read_raw_entries(input, strip=True):
     entries = []
     with open(input, 'r', encoding='utf8') as f:
         for line in f:
-            entries.append(line.strip())
+            if strip:
+                entries.append(line.strip())
+            else:
+                entries.append(line)
 
     return entries
 
