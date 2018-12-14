@@ -131,11 +131,11 @@ def solve_12(entries):
 
     print('..', end='')
     print_state(0, state)
-    for i in range(20):
+    for i in range(110):
         if state[0] or state[1] or state[2]:
             padleft(state, 2)
         if state[-1] or state[-2] or state[-3]:
-            padright(state, 2)
+            padright(state, 3)
 
         run_generation(state, rules)
         print_state( i+1, state)
