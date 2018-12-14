@@ -44,8 +44,10 @@ def solve_12(entries):
 
     last_sum = 0
     for i in range(110):
-        padleft(pots, 3)
-        padright(pots, 3)
+        if '#' in map(lambda p: p.value, pots[:3]):
+            padleft(pots, 2)
+        if '#' in map(lambda p: p.value, pots[:-3]):
+            padright(pots, 3)
         next = {}
         for j in range(2, len(pots) - 2):
             group = pots[j - 2:j + 3]
