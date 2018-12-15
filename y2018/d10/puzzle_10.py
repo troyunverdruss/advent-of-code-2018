@@ -2,6 +2,7 @@ from helpers.helpers import read_raw_entries
 from typing import List
 import re
 import sys
+import numpy
 
 
 class Star:
