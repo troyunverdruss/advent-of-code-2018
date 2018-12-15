@@ -3,6 +3,7 @@ from helpers.helpers import read_raw_entries
 from typing import List, Dict, Tuple
 import re
 import sys
+from copy import deepcopy
 
 
 class Pot:
@@ -97,13 +98,24 @@ def process_input(entries) -> Tuple[deque, Dict[Tuple, bool]]:
 
             rules[tuple(key)] = str_bool(result)
 
-    for k, v in rules.items():
-        print(k, v)
+    # for k, v in rules.items():
+    #     print(k, v)
 
     return state, rules
 
+def pad_generation(state, good=True):
+    if state[0] or state[1] or state[2]:
+        padleft(state, 2)
+    if state[-1] or state[-2] or state[-3]:
+        if good:
+            padright(state, 3)
+        else:
+            padright(state, 2)
 
-def run_generation(state, rules):
+
+def run_generation(state, rules, good=True):
+    pad_generation(state, good)
+
     new_values = {}
     for i in range(2, len(state) - 2):
         key = tuple(map(lambda x: x.value, list(state)[i - 2:i + 3]))
@@ -112,8 +124,12 @@ def run_generation(state, rules):
         else:
             new_values[i] = rules[key]
 
+    print_state(str(good)[:4], state)
+
     for k in new_values.keys():
         state[k].value = new_values[k]
+
+    print_state(str(good)[:4], state)
 
 
 def print_state(i, state):
@@ -132,23 +148,55 @@ def solve_12(entries):
     print('..', end='')
     print_state(0, state)
     for i in range(110):
-        if state[0] or state[1] or state[2]:
-            padleft(state, 2)
-        if state[-1] or state[-2] or state[-3]:
-            padright(state, 3)
-
         run_generation(state, rules)
-        print_state( i+1, state)
+        if i == 19:
+            print_state(i+1, state)
+            get_result(state)
 
+    print_state(110, state)
+
+    return get_result(state)
+
+
+def get_result(state):
     result = 0
     for pot in state:
         result += pot.compute_value()
-
+    print(result)
     return result
+
+
+def debug_difference():
+    entries_1 = read_raw_entries('input.txt')
+    entries_2 = read_raw_entries('input.txt')
+    state_1, rules_1 = process_input(entries_1)
+    state_2, rules_2 = process_input(entries_2)
+
+    print_state(0, state_1)
+    print_state(0, state_2)
+
+    for i in range(1):
+        run_generation(state_1, rules_1)
+        run_generation(state_2, rules_2, good=False)
+
+        for j in range(0, len(state_1)):
+            if j < len(state_2):
+                if state_1[j] != state_2[j]:
+                    print('Found difference! {} != {}'.format(state_1[j], state_2[j]))
+                    print_state(i+1, state_1)
+                    print_state(i+1, state_2)
+
+        if i == 19:
+            pass
+            # print_state(i+1, state)
+            # get_result(state)
+
+    # print_state(110, state)
 
 
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     r = solve_12(entries)
-    print(r)
-    #4197
+    # print(r)
+    # 3738
+    # 4197
