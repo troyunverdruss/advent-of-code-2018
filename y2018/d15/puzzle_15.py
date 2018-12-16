@@ -1,6 +1,7 @@
 from helpers.helpers import read_raw_entries, Point, manhattan_distance
 from copy import deepcopy
 import sys
+from collections import deque
 
 BEST_PATH = None
 
@@ -40,7 +41,7 @@ class Fighter:
             if manhattan_distance(self.loc, pd) > max_length + 2:
                 continue
 
-            path = compute_best_path(self.loc, pd, filled_map, [], max_length)
+            path = compute_best_path(self.loc, pd, filled_map, deque(), max_length, 0)
             if not path:
                 continue
 
@@ -129,29 +130,13 @@ directions = [
     Point(0, 1)
 ]
 
-
-def find_best_path(start: Point, dest: Point, filled_map):
-    pass
-
-
 def filter_enemies(fighter, fighters):
     return filter(lambda f: fighter.enemy(f), fighters)
 
 
-def find_dest_point(fighter: Fighter, filled_map, fighters):
-    enemies = filter_enemies(fighter, fighters)
-
-    possible_destinations = find_possible_destinations(filled_map, enemies)
-
-    accessible_areas = find_accessible_areas_from_point(fighter.loc, filled_map, [])
-
-    possible_destinations = filter_possible_destinations(accessible_areas, possible_destinations)
-
-    nearest_areas = find_nearest_areas
-
-
 # First item in a computed path is always your starting square!
-def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length=100):
+def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length=100, depth=0):
+    depth += 1
     if len(visited) == 0:
         # This is a special case since we always start out where there is something!
         pass
@@ -170,7 +155,9 @@ def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length
     visited.append(start)
 
     if start == dest:
-        return visited
+        to_return = deepcopy(visited)
+        visited.pop()
+        return to_return
 
     shortest_path = None
 
@@ -192,7 +179,7 @@ def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length
         if shortest_path is not None:
             max_length = len(shortest_path)
 
-        path = compute_best_path(start + d, dest, filled_map, deepcopy(visited), max_length)
+        path = compute_best_path(start + d, dest, filled_map, visited, max_length, depth)
 
         if not path:
             continue
@@ -209,7 +196,7 @@ def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length
         if shortest_path is not None:
             max_length = len(shortest_path)
 
-        path = compute_best_path(start + d, dest, filled_map, deepcopy(visited), max_length)
+        path = compute_best_path(start + d, dest, filled_map, visited, max_length, depth)
 
         if not path:
             continue
@@ -222,6 +209,10 @@ def compute_best_path(start: Point, dest: Point, filled_map, visited, max_length
             if shortest_path[1] != select_by_reading_order(shortest_path[1], path[1]):
                 shortest_path = path
 
+    # if shortest_path is None:
+    visited.pop()
+
+    depth -= 1
     return shortest_path
 
 
@@ -295,6 +286,8 @@ def solve_15(input):
             print('.')
             # sys.stdout.flush()
             fighter.attack(elves + goblins)
+            if round == 23:
+                print_state('mid', grid_map, elves, goblins)
 
 
 

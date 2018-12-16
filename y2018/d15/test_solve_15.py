@@ -1,5 +1,5 @@
 from unittest import TestCase
-from y2018.d15.puzzle_15 import solve_15, parse_map, Fighter, find_best_path, sort_fighters, print_state, \
+from y2018.d15.puzzle_15 import solve_15, parse_map, Fighter, sort_fighters, print_state, \
     find_possible_destinations, find_accessible_areas_from_point, fill_temp_map, filter_enemies, \
     filter_possible_destinations, compute_best_path, select_by_reading_order
 from helpers.helpers import read_raw_entries, Point
