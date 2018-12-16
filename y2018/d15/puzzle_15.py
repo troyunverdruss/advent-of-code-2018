@@ -14,6 +14,9 @@ class Fighter:
         return repr('{}: ({},{}) [{}]'.format(self.type, self.loc.x, self.loc.y, self.hit_points))
 
     def move(self, grid_map, fighters):
+        if self.hit_points <= 0:
+            return
+
         # Get ourselves a filled map and potential destinations
         filled_map = fill_temp_map(fighters, grid_map)
         pds = find_possible_destinations(self.loc, filled_map, filter_enemies(self, fighters))
@@ -25,10 +28,19 @@ class Fighter:
         aa = find_accessible_areas_from_point(self.loc, filled_map, [])
         pds = filter_possible_destinations(aa, pds)
 
+        pds = sorted(pds, key=lambda p: manhattan_distance(self.loc, p))
+
         # Now find the shortest or best path to an available enemy
         best_path_to_closest_enemy = None
+        max_length = 100
         for pd in pds:
-            path = compute_best_path(self.loc, pd, filled_map, [])
+            if best_path_to_closest_enemy is not None:
+                max_length = len(best_path_to_closest_enemy)
+
+            if manhattan_distance(self.loc, pd) > max_length + 2:
+                continue
+
+            path = compute_best_path(self.loc, pd, filled_map, [], max_length)
             if not path:
                 continue
 
@@ -45,11 +57,17 @@ class Fighter:
             self.loc = best_path_to_closest_enemy[1]
 
     def attack(self, fighters):
-        potential_locations = []
-        for d in directions:
-            potential_locations.append(self.loc + d)
+        if self.hit_points <= 0:
+            return
 
-        potential_enemies = filter(lambda f: f.loc in potential_locations and self.enemy(f), fighters)
+        potential_enemies = []
+        for d in directions:
+            for f in fighters:
+                if f.loc == self.loc + d and self.enemy(f):
+                    potential_enemies.append(f)
+
+
+        # potential_enemies = list(filter(lambda f: f.loc in potential_locations and self.enemy(f) and f.hit_points > 0, fighters))
         enemies = sorted(potential_enemies, key=lambda f: f.hit_points)
         if len(enemies) > 0:
             enemies[0].hit_points -= 3
@@ -256,23 +274,32 @@ def solve_15(input):
 
     print_state(0, grid_map, elves, goblins)
 
-    round = 1
+    round = 0
     combat = True
 
     while combat:
-        for fighter in sort_fighters(elves, goblins):
-            fighter.move(grid_map, elves + goblins)
-            print('.', end='')
-            sys.stdout.flush()
-            fighter.attack(elves + goblins)
+        # print('Round: ' + str(round))
+        # print_state(round, grid_map, elves, goblins)
 
+        for fighter in sort_fighters(elves, goblins):
             elves = list(filter(lambda e: e.hit_points > 0, elves))
             goblins = list(filter(lambda g: g.hit_points > 0, goblins))
 
             if len(elves) == 0 or len(goblins) == 0:
                 combat = False
+                break
+
+            print('About to move: {}'.format(fighter), end='')
+            sys.stdout.flush()
+            fighter.move(grid_map, elves + goblins)
+            print('.')
+            # sys.stdout.flush()
+            fighter.attack(elves + goblins)
+
+
 
         print_state(round, grid_map, elves, goblins)
+        # print('End')
 
         if combat:
             round += 1
@@ -289,4 +316,5 @@ def sort_fighters(elves, goblins):
 
 
 if __name__ == '__main__':
-    pass
+    r = solve_15('input.txt')
+    print(r)

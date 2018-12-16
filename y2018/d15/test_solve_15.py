@@ -100,8 +100,12 @@ class TestSolve_15(TestCase):
         r = solve_15('tests/sample-1.txt')
         self.assertEqual(27730, r)
 
-    def test_1_round_23(self):
-        r = solve_15('tests/path-4.txt')
+    def test_blah(self):
+        r = solve_15('tests/enemy-selection-1.txt')
+        self.assertEqual(27730, r)
+
+    def test_blah2(self):
+        r = solve_15('tests/enemy-selection-2.txt')
         self.assertEqual(27730, r)
 
     def test_2(self):
