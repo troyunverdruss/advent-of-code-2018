@@ -26,9 +26,15 @@ class Point:
         self.y = y
 
     def __add__(self, other):
-        self.x += other.x
-        self.y += other.y
-        return self
+        # Changing this will probably break some of the older puzzles, but
+        # I think it's better this way ...
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __repr__(self):
+        return repr('{}: ({},{})'.format(self.id, self.x, self.y))
 
 
 
