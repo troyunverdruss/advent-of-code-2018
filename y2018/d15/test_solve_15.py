@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 from y2018.d15.puzzle_15 import solve_15, parse_map, Fighter, sort_fighters, print_state, \
     find_possible_destinations, find_accessible_areas_from_point, fill_temp_map, filter_enemies, \
     filter_possible_destinations, compute_best_path, select_by_reading_order
@@ -14,6 +14,7 @@ class Path:
 
 
 class TestSolve_15(TestCase):
+    @skip
     def test_target_selection(self):
         entries = read_raw_entries('tests/target_selection/start_map.txt')
         grid_map, elves, goblins = parse_map(entries)
@@ -27,6 +28,7 @@ class TestSolve_15(TestCase):
 
             print_state('0.{}'.format(i), grid_map, elves, goblins)
 
+    @skip
     def test_movement(self):
         entries = read_raw_entries('tests/movement.txt')
         grid_map, elves, goblins = parse_map(entries)
@@ -41,6 +43,7 @@ class TestSolve_15(TestCase):
 
                 print_state('{}.{}'.format(i, j), grid_map, elves, goblins)
 
+    @skip
     def test_path_1(self):
         entries = read_raw_entries('tests/path-1.txt')
         entries = read_raw_entries('tests/path-1.txt')
@@ -60,6 +63,7 @@ class TestSolve_15(TestCase):
 
         self.assertEqual(correct_path, path)
 
+    @skip
     def test_path_2(self):
         entries = read_raw_entries('tests/path-2.txt')
         grid_map, elves, goblins = parse_map(entries)
@@ -78,6 +82,7 @@ class TestSolve_15(TestCase):
 
         self.assertEqual(correct_path, path)
 
+    @skip
     def test_path_3(self):
         entries = read_raw_entries('tests/path-3.txt')
         grid_map, elves, goblins = parse_map(entries)
@@ -100,13 +105,47 @@ class TestSolve_15(TestCase):
         r = solve_15('tests/sample-1.txt')
         self.assertEqual(27730, r)
 
+    @skip
     def test_blah(self):
         r = solve_15('tests/enemy-selection-1.txt')
         self.assertEqual(27730, r)
 
+    @skip
     def test_blah2(self):
         r = solve_15('tests/enemy-selection-2.txt')
         self.assertEqual(27730, r)
+
+    @skip
+    def test_blah3(self):
+        r = solve_15('tests/movement-2.txt')
+        self.assertEqual(27730, r)
+
+    @skip
+    def test_blah4(self):
+        r = solve_15('tests/movement-3.txt')
+        self.assertEqual(27730, r)
+
+    @skip
+    def test_blah5(self):
+        r = solve_15('tests/movement-4.txt')
+        self.assertEqual(27730, r)
+
+    @skip
+    def test_blah6(self):
+        r = solve_15('tests/movement-5.txt')
+        self.assertEqual(27730, r)
+
+    @skip
+    def test_find_aa(self):
+        # Should be 88 locations
+        entries = read_raw_entries('tests/find-accessible-test.txt')
+        grid_map, elves, goblins = parse_map(entries)
+        filled_map = fill_temp_map(elves + goblins, grid_map)
+
+        aa = find_accessible_areas_from_point(goblins[0].loc + Point(1, 0), filled_map, [])
+        print(len(set(aa)))
+
+        self.assertEqual(329, len(set(aa)))
 
     def test_2(self):
         r = solve_15('tests/sample-2.txt')

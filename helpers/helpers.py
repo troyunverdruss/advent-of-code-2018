@@ -39,6 +39,9 @@ class Point:
     def __repr__(self):
         return repr('{}: ({},{})'.format(self.id, self.x, self.y))
 
+    def __hash__(self):
+        return hash('{}: ({},{})'.format(self.id, self.x, self.y))
+
 
 
 def manhattan_distance(a: Point, b: Point) -> int:
