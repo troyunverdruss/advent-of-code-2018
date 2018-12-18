@@ -102,8 +102,10 @@ class TestSolve_15(TestCase):
         self.assertEqual(correct_path, path)
 
     def test_1(self):
-        r = solve_15('tests/sample-1.txt')
+        r,s = solve_15('tests/sample-1.txt')
         self.assertEqual(27730, r)
+        r,s = solve_15('tests/sample-1.txt', 15, False)
+        self.assertEqual(4988, r)
 
     @skip
     def test_blah(self):
@@ -148,21 +150,30 @@ class TestSolve_15(TestCase):
         self.assertEqual(329, len(set(aa)))
 
     def test_2(self):
-        r = solve_15('tests/sample-2.txt')
+        r, s = solve_15('tests/sample-2.txt')
         self.assertEqual(36334, r)
 
+
     def test_3(self):
-        r = solve_15('tests/sample-3.txt')
+        r,s = solve_15('tests/sample-3.txt')
         self.assertEqual(39514, r)
+        r, s = solve_15('tests/sample-3.txt', 4, False)
+        self.assertEqual(31284, r)
 
     def test_4(self):
-        r = solve_15('tests/sample-4.txt')
+        r,s = solve_15('tests/sample-4.txt')
         self.assertEqual(27755, r)
+        r, s = solve_15('tests/sample-4.txt', 15, False)
+        self.assertEqual(3478, r)
 
     def test_5(self):
-        r = solve_15('tests/sample-5.txt')
+        r,s = solve_15('tests/sample-5.txt')
         self.assertEqual(28944, r)
 
+        r, s = solve_15('tests/sample-5.txt', 12, False)
+        self.assertEqual(6474, r)
     def test_6(self):
-        r = solve_15('tests/sample-6.txt')
+        r,s = solve_15('tests/sample-6.txt')
         self.assertEqual(18740, r)
+        r, s = solve_15('tests/sample-6.txt', 34, False)
+        self.assertEqual(1140, r)

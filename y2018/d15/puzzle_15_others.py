@@ -245,7 +245,7 @@ if __name__ == '__main__':
 
     print('Real:')
     # data_real = data_import('data/day15', str)
-    data_real = read_raw_entries('tests/sample-1.txt')
+    data_real = read_raw_entries('input.txt')
     print('Solution of 1 is', part1(data_real))
     print('Solution of 2 is', part2(data_real))
 
