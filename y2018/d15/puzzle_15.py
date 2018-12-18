@@ -10,15 +10,16 @@ ROUND = 0
 FIGHTER = None
 
 
-def find_closest_target(coords, target, elements):
+def find_closest_target(start, target_type, filled_map):
     previous_move = {}
     distance = {}
 
+    # These are our first spindles of the search
     to_visit = deque()
     for d in directions:
-        coords_ = (coords + d)
+        coords_ = (start + d)
         to_visit.append(coords_)
-        previous_move[coords_] = coords
+        previous_move[coords_] = start
         distance[coords_] = 1
 
     closest = None
@@ -26,26 +27,16 @@ def find_closest_target(coords, target, elements):
 
         new_coords = to_visit.popleft()
 
-        # if new_coords.x >= 0 and new_coords.y >= 0 and new_coords.x < len(elements[0]) and new_coords.y < len(elements):
-        #     continue
-
-        # print(coords, new_coords, list(itertools.islice(to_visit, 0, 5)))
-
-        # elements = {}
-        # for y in range(len(filled_map)):
-        #     for x in range(len(filled_map[0])):
-        #         elements[Point(x, y)] = filled_map[y][x]
-
-        if check_coord_range(new_coords, elements) and elements[new_coords.y][new_coords.x] == target:
+        if check_coord_range(new_coords, filled_map) and filled_map[new_coords.y][new_coords.x] == target_type:
+            # We found a target
             closest = new_coords
             break
 
-        if check_coord_range(new_coords, elements) and elements[new_coords.y][new_coords.x] != '.':
+        if check_coord_range(new_coords, filled_map) and filled_map[new_coords.y][new_coords.x] != '.':
+            # We ran into an obstacle: #, G, E
             continue
 
-        # if new_coords in elements:
-        #     continue
-
+        # We still haven't found anything, so let's add on new places to search later
         for d in directions:
             coords_ = new_coords + d
             if coords_ not in previous_move:
@@ -55,22 +46,22 @@ def find_closest_target(coords, target, elements):
                 to_visit.append(coords_)
 
     if closest is None:
-        return None, None, None
+        return None, None
 
     position = closest
     next_move = previous_move[closest]
-    while next_move != coords:
+    while next_move != start:
         position = next_move
         next_move = previous_move[position]
 
-    return closest, position, distance[closest]
+    return position, distance[closest]
 
 
 def check_coord_range(coord, filled_map):
     return 0 <= coord.x < len(filled_map[0]) and 0 <= coord.y < len(filled_map)
 
 
-def add_level(parent: Node, filled_map, potential_destinations):
+def add_level(top_of_tree, parent: Node, filled_map, potential_destinations):
     for descendant in [parent] + list(parent.descendants):
         if descendant.is_leaf:
 
@@ -90,36 +81,43 @@ def add_level(parent: Node, filled_map, potential_destinations):
                 if 0 <= new_coords.x < len(filled_map[0]) and 0 <= new_coords.y < len(filled_map) \
                         and filled_map[new_coords.y][new_coords.x] == '.':
 
-                    # Don't immediately double back
-                    if descendant.loc == new_coords:
+                    # Let's see if we've seen this square before
+                    seen = list(map(lambda n: n.loc, [top_of_tree] + list(top_of_tree.children)))
+
+                    if new_coords in seen:
                         continue
 
-                    # Don't cross my tail
-                    for a in [descendant] + list(descendant.ancestors):
-                        if a.loc == new_coords:
-                            do_add = False
-                            break
+                    # # Don't immediately double back
+                    # if descendant.loc == new_coords:
+                    #     continue
+                    #
+                    # # Don't cross my tail
+                    # for a in [descendant] + list(descendant.ancestors):
+                    #     if a.loc == new_coords:
+                    #         do_add = False
+                    #         break
 
-                    if do_add is False:
-                        continue
+                    # if do_add is False:
+                    #     continue
+                    #
+                    # # Don't add a node if this spot has appeared
+                    # # anywhere in my siblings ancestors: ie: shorter distance
+                    # if descendant.parent:
+                    #     for parent_sibling in descendant.parent.siblings:
+                    #         for a in [parent_sibling] + list(parent_sibling.ancestors):
+                    #             if a.loc == new_coords:
+                    #                 do_add = False
 
-                    # Don't add a node if this spot has appeared
-                    # anywhere in my siblings ancestors: ie: shorter distance
-                    if descendant.parent:
-                        for parent_sibling in descendant.parent.siblings:
-                            for a in [parent_sibling] + list(parent_sibling.ancestors):
-                                if a.loc == new_coords:
-                                    do_add = False
-
-                    if do_add:
-                        Node(new_coords, descendant, loc=new_coords)
+                    # if do_add:
+                    Node(new_coords, descendant, loc=new_coords)
 
 
 class Fighter:
-    def __init__(self, x, y, type):
+    def __init__(self, x, y, type, attack_strength=3):
         self.loc = Point(x, y)
         self.hit_points = 200
         self.type = type
+        self.attack_strength = attack_strength
 
     def __repr__(self):
         return repr('{}: ({},{}) [{}]'.format(self.type, self.loc.x, self.loc.y, self.hit_points))
@@ -128,22 +126,12 @@ class Fighter:
         if self.hit_points <= 0:
             return
 
-        filled_map = fill_temp_map(fighters, grid_map)
+        next_loc, distance = find_closest_target(self.loc, self.get_enemy_type(), fill_temp_map(fighters, grid_map))
 
-        target = self.get_enemy()
-
-        closest, next_coords, distance = find_closest_target(
-            self.loc, target, filled_map
-        )
-
-        if next_coords is None:
+        if next_loc is None or distance < 2:
             return
 
-        if distance < 2:
-            return
-
-        old = self.loc
-        self.loc = next_coords
+        self.loc = next_loc
 
     def _move(self, grid_map, fighters):
         if self.hit_points <= 0:
@@ -163,14 +151,11 @@ class Fighter:
             return
 
         top_of_tree = Node(self.loc, loc=self.loc)
-        add_level(top_of_tree, filled_map, pds)
+        add_level(top_of_tree, top_of_tree, filled_map, pds)
 
         last_len = len(top_of_tree.descendants)
-        short_circuit_destination = None
-        last_leaves = None
-        while len(set(pds) & set(
-                map(lambda d: d.loc, top_of_tree.descendants))) == 0 and short_circuit_destination is None:
-            print('Height: {}, desc: {}'.format(top_of_tree.height, len(top_of_tree.descendants)))
+        while len(set(pds) & set(map(lambda d: d.loc, top_of_tree.descendants))) == 0:
+            # print('Height: {}, desc: {}'.format(top_of_tree.height, len(top_of_tree.descendants)))
 
             # print('')
             # for pre, fill, node in RenderTree(top_of_tree):
@@ -178,10 +163,10 @@ class Fighter:
 
             curr_leaves = anytree_search.findall(top_of_tree,
                                                  filter_=lambda n: n.is_leaf and n.depth == top_of_tree.height)
-            print('curr leaves: {}'.format(len(curr_leaves)))
+            # print('curr leaves: {}'.format(len(curr_leaves)))
 
             for leaf in curr_leaves:
-                add_level(leaf, filled_map, pds)
+                add_level(top_of_tree, leaf, filled_map, pds)
                 # print('')
                 # for pre, fill, node in RenderTree(top_of_tree):
                 #     print("%s%s" % (pre, node.name))
@@ -189,11 +174,12 @@ class Fighter:
             if last_len == len(top_of_tree.descendants):
                 # Couldn't find anywhere to try and go
                 return
-            elif top_of_tree.height != 1 and len(anytree_search.findall(top_of_tree, filter_=lambda
-                    n: n.is_leaf and n.depth == top_of_tree.height)) == 1:
-                short_circuit_destinationcircuit_destination = \
-                anytree_search.findall(top_of_tree, filter_=lambda n: n.is_leaf, maxlevel=top_of_tree.height)[0]
-            #     for pre, fill, node in RenderTree(top_of_tree):
+
+            # elif top_of_tree.height != 1 and len(anytree_search.findall(top_of_tree, filter_=lambda
+            #         n: n.is_leaf and n.depth == top_of_tree.height)) == 1:
+            #     short_circuit_destinationcircuit_destination = \
+            #         anytree_search.findall(top_of_tree, filter_=lambda n: n.is_leaf, maxlevel=top_of_tree.height)[0]
+            # #     for pre, fill, node in RenderTree(top_of_tree):
             #         print("%s%s" % (pre, node.name))
             else:
                 last_len = len(top_of_tree.descendants)
@@ -203,10 +189,10 @@ class Fighter:
         #     print("%s%s" % (pre, node.name))
 
         # Now let's find the correct path
-        if short_circuit_destination:
-            closest_points_we_can_reach = short_circuit_destination.loc
-        else:
-            closest_points_we_can_reach = set(pds) & set(map(lambda d: d.loc, top_of_tree.descendants))
+        # if short_circuit_destination:
+        #     closest_points_we_can_reach = short_circuit_destination.loc
+        # else:
+        closest_points_we_can_reach = set(pds) & set(map(lambda d: d.loc, top_of_tree.descendants))
 
         nodes = []
         depth = 0
@@ -217,8 +203,8 @@ class Fighter:
 
         best_path = None
         for path in nodes:
+            curr_path = list(path.ancestors) + [path]
             if best_path is None:
-                curr_path = list(path.ancestors) + [path]
                 best_path = curr_path
             elif best_path[1].loc != select_by_reading_order(best_path[1].loc, curr_path[1].loc):
                 best_path = curr_path
@@ -292,12 +278,12 @@ class Fighter:
         # potential_enemies = list(filter(lambda f: f.loc in potential_locations and self.enemy(f) and f.hit_points > 0, fighters))
         enemies = sorted(potential_enemies, key=lambda f: f.hit_points)
         if len(enemies) > 0:
-            enemies[0].hit_points -= 3
+            enemies[0].hit_points -= self.attack_strength
 
     def enemy(self, other):
         return self.type != other.type
 
-    def get_enemy(self):
+    def get_enemy_type(self):
         if self.type == 'E':
             return 'G'
         else:
@@ -500,56 +486,49 @@ def find_accessible_areas_from_point(start: Point, filled_map, already_known):
     return already_known
 
 
-def solve_15(input):
+def solve_15(input, elf_strength=3, allow_elves_to_die=True):
     entries = read_raw_entries(input)
     grid_map, elves, goblins = parse_map(entries)
 
-    print_state(0, grid_map, elves, goblins)
+    total_elves = len(elves)
+    for elf in elves:
+        elf.attack_strength = elf_strength
 
     round = 0
     combat = True
 
     while combat:
-        # print('Round: ' + str(round))
-        # print_state(round, grid_map, elves, goblins)
+        print_state(round, grid_map, elves, goblins)
 
-        blah = 0
         for fighter in sort_fighters(elves, goblins):
-            global FIGHTER
-            FIGHTER = fighter
-
-            # if FIGHTER.loc != Point(8,13):
-            #     continue
 
             elves = list(filter(lambda e: e.hit_points > 0, elves))
             goblins = list(filter(lambda g: g.hit_points > 0, goblins))
 
-            if len(elves) == 0 or len(goblins) == 0:
+            if allow_elves_to_die is False and len(elves) != total_elves:
                 combat = False
                 break
 
-            print('About to move: {}'.format(fighter), end='')
-            sys.stdout.flush()
-            fighter.move(grid_map, elves + goblins)
-            print('.')
-            # sys.stdout.flush()
-            fighter.attack(elves + goblins)
-            if round == 23:
-                print_state('mid', grid_map, elves, goblins)
+            elif len(elves) == 0 or len(goblins) == 0:
+                combat = False
+                break
 
-        print_state(round, grid_map, elves, goblins)
-        # print('End')
+            fighter.move(grid_map, elves + goblins)
+            fighter.attack(elves + goblins)
 
         if combat:
             round += 1
-            global ROUND
-            ROUND = round
 
     hit_points = 0
+    elf_count = 0
     for f in elves + goblins:
         hit_points += f.hit_points
+        if f.type == 'E':
+            elf_count += 1
 
-    return round * hit_points
+    print_state(round, grid_map, elves, goblins)
+    print('Elves: {}/{}. Rounds: {}, HP: {}, Total: {}'.format(elf_count, total_elves, round, hit_points, round * hit_points))
+    return round * hit_points, len(elves) == total_elves
 
 
 def sort_fighters(elves, goblins):
@@ -557,5 +536,20 @@ def sort_fighters(elves, goblins):
 
 
 if __name__ == '__main__':
-    r = solve_15('input.txt')
-    print(r)
+    # r, elves_survived = solve_15('input.txt')
+    # print('Part 1: {}'.format(r))
+
+    power = None
+    for i in range(20, 200):
+        power = i
+        print('Trying power: {}'.format(i))
+        r, elves_survived = solve_15('input.txt', i, False)
+        if elves_survived:
+            break
+        else:
+            continue
+
+    print('Part 2: {}, power: {}'.format(r, power))
+
+    # 56906 < mine
+    # 53725 < correct ?
