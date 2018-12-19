@@ -27,7 +27,6 @@ class TestSolve_16(TestCase):
         self.assertEqual(3, r)
         self.assertTrue(addi.test(s))
 
-
     # addr
     # borr
     def test_2(self):
@@ -131,7 +130,6 @@ class TestSolve_16(TestCase):
         r = find_match_count(s, limit=16)
         self.assertEqual(5, r)
         self.assertTrue(gtri.test(s))
-
 
     # gtri - greater than, writes 1
     # gtrr
@@ -253,3 +251,15 @@ class TestSolve_16(TestCase):
         r = find_match_count(s, limit=16)
         self.assertEqual(5, r)
         self.assertTrue(eqrr.test(s))
+
+    def test_24(self):
+        s = Sample((0, 2, 1, 3), (1, 0, 0, 1), (0, 0, 1, 3))
+        r = find_match_count(s, limit=16)
+        self.assertEqual(13, r)
+        self.assertTrue(gtir.test(s))
+        self.assertTrue(gtri.test(s))
+        self.assertTrue(gtrr.test(s))
+
+        # gtir
+        # gtri
+        # gtrr
