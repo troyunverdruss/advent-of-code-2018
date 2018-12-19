@@ -140,8 +140,8 @@ class gtir(opcode):
         if not opcode.verify_state_is_basically_ok(sample):
             return False
 
-        if (1 == sample.after[3] and sample.opcode[1] > sample.before[sample.opcode[2]]) or \
-                (0 == sample.after[3] and sample.opcode[1] <= sample.before[sample.opcode[2]]):
+        if (1 == sample.after[sample.opcode[3]] and sample.opcode[1] > sample.before[sample.opcode[2]]) or \
+                (0 == sample.after[sample.opcode[3]] and sample.opcode[1] <= sample.before[sample.opcode[2]]):
             return True
 
 
@@ -152,8 +152,8 @@ class gtri(opcode):
         if not opcode.verify_state_is_basically_ok(sample):
             return False
 
-        if (1 == sample.after[3] and sample.before[sample.opcode[1]] > sample.opcode[2]) or \
-                (0 == sample.after[3] and sample.before[sample.opcode[1]] <= sample.opcode[2]):
+        if (1 == sample.after[sample.opcode[3]] and sample.before[sample.opcode[1]] > sample.opcode[2]) or \
+                (0 == sample.after[sample.opcode[3]] and sample.before[sample.opcode[1]] <= sample.opcode[2]):
             return True
 
 
@@ -164,8 +164,8 @@ class gtrr(opcode):
         if not opcode.verify_state_is_basically_ok(sample):
             return False
 
-        if (1 == sample.after[3] and sample.before[sample.opcode[1]] > sample.before[sample.opcode[2]]) or \
-                (0 == sample.after[3] and sample.before[sample.opcode[1]] <= sample.before[sample.opcode[2]]):
+        if (1 == sample.after[sample.opcode[3]] and sample.before[sample.opcode[1]] > sample.before[sample.opcode[2]]) or \
+                (0 == sample.after[sample.opcode[3]] and sample.before[sample.opcode[1]] <= sample.before[sample.opcode[2]]):
             return True
 
 # done vvv
@@ -216,7 +216,7 @@ def parse_samples(entries):
     samples = []
     before, opcode, after = None, None, None
     for line in entries:
-        print(line)
+        # print(line)
         if i % 4 == 0:
             m = b.match(line)
             before = tuple([int(m.group(1)), int(m.group(2)), int(m.group(3)), int(m.group(4))])
@@ -242,7 +242,7 @@ def find_match_count(sample, limit=3):
     for op in opcodes:
         if op.test(sample):
             matches += 1
-            print('Matched: {}'.format(op))
+            # print('Matched: {}'.format(op))
 
         if matches >= limit:
             return matches
@@ -252,11 +252,18 @@ def find_match_count(sample, limit=3):
 
 def solve_16(samples):
     matches_three = 0
+    i = 0
+    print(len(samples))
     for sample in samples:
-        m = find_match_count(sample)
+        m = find_match_count(sample, limit=16)
 
+        print('{}: {} matches'.format(i, m))
         if m >= 3:
             matches_three += 1
+
+        if i == 780:
+            print(sample)
+        i += 1
 
     return matches_three
 
