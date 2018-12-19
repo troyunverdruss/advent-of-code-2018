@@ -59,6 +59,7 @@ def solve_17(input):
         clay[point] = '#'
 
     drop_points = deque([Point(500, 0)])
+    drop_point_parents = {}
 
     # go down from first drop point
     down = Point(0, 1)
@@ -66,13 +67,18 @@ def solve_17(input):
     right = Point(1, 0)
     up = Point(0, -1)
     tick = 0
+    lowest_drop_point = -1
     while len(drop_points) > 0:
         tick += 1
 
         drop_point = drop_points.popleft()
         loc = deepcopy(drop_point)
-        print('Dropping from {}'.format(drop_point))
+        # print('Dropping from {}'.format(drop_point))
 
+        if drop_point.y > lowest_drop_point:
+            print('Dropping for new depth: {}'.format(drop_point.y))
+            lowest_drop_point = drop_point.y
+            print_state(clay, water, min_x, max_x, min_y, max_y)
 
         keep_filling = True
         while keep_filling:
@@ -86,10 +92,9 @@ def solve_17(input):
                 while test not in clay:
                     water[test] = '~'
                     if test + down not in clay and test + down not in water:
-                        drop_points.append(test)
-                        # if drop_point in drop_points:
-                        #     drop_points.remove(drop_point)
-                        # drop_points.append(drop_point)
+                        move_or_append(drop_points, test)
+                        keep_filling = False
+                        drop_point_parents[test] = drop_point
                         break
                     else:
                         test = test + left
@@ -99,17 +104,18 @@ def solve_17(input):
                 while test not in clay:
                     water[test] = '~'
                     if test + down not in clay and test + down not in water:
-                        drop_points.append(test)
-                        # if drop_point in drop_points:
-                        #     drop_points.remove(drop_point)
-                        # drop_points.append(drop_point)
+                        move_or_append(drop_points, test)
                         keep_filling = False
+                        drop_point_parents[test] = drop_point
                         break
                     else:
                         test = test + right
 
                 loc = loc + up
                 if loc.y < drop_point.y:
+                    if drop_point in drop_point_parents:
+                        move_or_append(drop_points, drop_point_parents[drop_point])
+                        del drop_point_parents[drop_point]
                     break
 
             else:
@@ -119,13 +125,19 @@ def solve_17(input):
                 elif loc.y >= min_y:
                     water[loc] = '|'
 
-            print_state(clay, water, min_x, max_x, min_y, max_y)
+            # print(drop_points)
+            # print_state(clay, water, min_x, max_x, min_y, max_y)
+
 
 
     print_state(clay, water, min_x, max_x, min_y, max_y)
 
     return len(water)
 
+def move_or_append(deq: deque, item):
+    if item in deq:
+        deq.remove(item)
+    deq.append(item)
 
 
 
