@@ -10,4 +10,4 @@ class TestSolve_17(TestCase):
 
     def test_edge_case(self):
         r = solve_17('edge-case-test.txt')
-        self.assertEqual(57, r)
+        self.assertEqual(472, r)
