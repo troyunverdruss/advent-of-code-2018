@@ -164,11 +164,18 @@ def problem2(LINES):
     for op in operations:
         operations[op] = operations[op].pop()
     registers = [0, 0, 0, 0]
+
+    print(operations)
+
+    j = 0
     for line in LINES[i:]:
         if not line.strip():
             continue
         opcode, a, b, c = list_map(int, line.split(' '))
+        print('{} Running instruction: {}'.format(j, line), end='')
         registers = operations[opcode](registers, a, b, c)
+        print(' = {}'.format(registers))
+        j += 1
     return registers[0]
 
 def parse_input_file(fname):
@@ -178,7 +185,7 @@ def parse_input_file(fname):
     return s.splitlines()
 
 def main():
-    l = parse_input_file('input-part1.txt')
+    l = parse_input_file('input.txt')
     print(problem1(l))
     print(problem2(l))
 
