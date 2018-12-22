@@ -13,7 +13,7 @@ class StartPoint:
         self.depth = depth
 
     def __repr__(self):
-        return repr('{} {}'.format(self.origin, self.index))
+        return repr('{} {} {}'.format(self.origin, self.index, self.depth))
 
 
 def solve_20(route_str):
@@ -66,6 +66,8 @@ def solve_20(route_str):
                         else:
                             break
                     index += 1
+            elif value == ')':
+                depth -= 1
             elif value == '$':
                 break
 
@@ -84,14 +86,18 @@ def solve_20(route_str):
 def process_inner_paren(last_loc, index, route, to_walk, depth):
     p = StartPoint(index + 1, Point(last_loc.x, last_loc.y), depth)
     to_walk.append(p)
+    start_depth = depth
     while True:
         index += 1
         v = route[index]
         if v == '|':
-            p = StartPoint(index + 1, Point(last_loc.x, last_loc.y), depth)
+            if route[index + 1] == ')':
+                p = StartPoint(index + 2, Point(last_loc.x, last_loc.y), depth - 1)
+            else:
+                p = StartPoint(index + 1, Point(last_loc.x, last_loc.y), depth)
             to_walk.append(p)
         elif v == ')':
-            if depth > 0:
+            if depth > start_depth:
                 depth -= 1
             else:
                 break
