@@ -45,6 +45,9 @@ class Point:
     def __hash__(self):
         return hash('{}({},{})'.format(self.id, self.x, self.y))
 
+    def __str__(self):
+        return '{}({},{})'.format(self.id, self.x, self.y)
+
 
 def get_min_max(points: List[Point]):
     min_x = min(points, key=lambda s: s.x).x
