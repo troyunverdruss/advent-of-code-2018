@@ -37,6 +37,8 @@ class Point:
         return Point(self.x - other.x, self.y - other.y)
 
     def __eq__(self, other):
+        if type(other) != Point:
+            return False
         return self.x == other.x and self.y == other.y
 
     def __repr__(self):
