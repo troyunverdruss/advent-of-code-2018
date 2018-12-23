@@ -42,27 +42,26 @@ class TestSolve_20(TestCase):
         d = solve_20('^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$')
         self.assertEqual(31, d)
 
-    @skip
+    # @skip
     def test_load_gml(self):
-        g = nx.DiGraph()
-
         g: nx.DiGraph = nx.read_gml('real-nodes.gml', destringizer=self.make_points)
+        all_paths = nx.single_source_shortest_path(g, source=Point(0,0))
 
         max_distance = 0
-        nodes = len(g.nodes)
         i = 0
-
-        all_paths = nx.single_source_shortest_path(g, source=Point(0,0))
+        node_count = len(g.nodes)
+        greater_than_1000 = 0
 
         for k in all_paths.keys():
             i += 1
-            # if p == Point(0,0):
-            #     continue
 
             if len(all_paths[k]) > max_distance:
                 max_distance = len(all_paths[k])
-            print('{}/{}'.format(i, nodes))
+            if len(all_paths[k]) >= 1001:
+                greater_than_1000 += 1
+            print('{}/{}'.format(i, node_count))
         print('max: {}'.format(max_distance - 1))
+        print('more than 1000: {}'.format(greater_than_1000))
 
         for node in g.nodes:
             i += 1
@@ -70,6 +69,9 @@ class TestSolve_20(TestCase):
             if distance > max_distance:
                 max_distance = distance
         print(max_distance)
+
+        # 8616 too high
+        # 8613
 
     def make_points(self, string):
         # print(string)

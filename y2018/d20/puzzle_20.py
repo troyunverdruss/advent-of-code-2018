@@ -1,4 +1,4 @@
-from collections import deque
+import re
 from copy import deepcopy
 
 import networkx as nx
@@ -102,6 +102,29 @@ def solve_20(route_str):
     return max_distance - 1
 
 
+def part2():
+    g: nx.DiGraph = nx.read_gml('real-nodes.gml', destringizer=make_points)
+    all_paths = nx.single_source_shortest_path(g, source=Point(0, 0))
+
+    greater_than_1000 = 0
+
+    for k in all_paths.keys():
+        # greater than 1001 since every path start at (and includes) the origin
+        if len(all_paths[k]) >= 1001:
+            greater_than_1000 += 1
+
+    return greater_than_1000
+
+    # 8616 too high
+    # 8613
+
+
+def make_points(string):
+    p = re.compile(r'\((-?\d+),\s*(-?\d+)\)')
+    m = p.match(string)
+    return Point(m.group(1), m.group(2))
+
+
 def process_inner_paren(last_loc, index, route, to_walk, depth):
     p = StartPoint(index + 1, Point(last_loc.x, last_loc.y), depth)
     to_walk.add(p)
@@ -131,3 +154,6 @@ if __name__ == '__main__':
     input = read_raw_entries('input.txt')
     r = solve_20(input[0].strip())
     print('Max distance: {}'.format(r))
+
+    r = part2()
+    print('Paths through at least 1000 doors: {}'.format(r))
