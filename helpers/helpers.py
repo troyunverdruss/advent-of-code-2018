@@ -50,10 +50,6 @@ class Point:
     def __str__(self):
         return '{}({},{})'.format(self.id, self.x, self.y)
 
-    @staticmethod
-    def directions():
-        return {'UP': Point(0, 1), 'DOWN': Point(0, -1), 'LEFT': Point(-1, 0), 'RIGHT': Point(1, 0)}
-
 
 def get_min_max(points: List[Point]):
     min_x = min(points, key=lambda s: s.x).x
