@@ -1,7 +1,3 @@
-import sys
-from collections import deque
-
-sys.path.append('/Users/troy/Documents/code/advent-of-code')
 from helpers.helpers import Point, read_raw_entries
 
 
@@ -35,10 +31,8 @@ class Region:
         elif self.loc.x == 0:
             self._geo_index = self.loc.y * 48271
         else:
-            x_minus_one = self.cave[Point(self.loc.x - 1, self.loc.y)].geo_index()
-            y_minus_one = self.cave[Point(self.loc.x, self.loc.y - 1)].geo_index()
-            # print('{}: {}')
-            # print('{}: {} * {} = {}'.format(self.loc, x_minus_one, y_minus_one, x_minus_one * y_minus_one))
+            x_minus_one = self.cave[Point(self.loc.x - 1, self.loc.y)].erosion_level()
+            y_minus_one = self.cave[Point(self.loc.x, self.loc.y - 1)].erosion_level()
             self._geo_index = x_minus_one * y_minus_one
 
         return self._geo_index
@@ -88,13 +82,6 @@ def solve_22(depth, target):
             risk += region.type()
 
     return risk
-
-def find_factors(n):
-    factors = deque()
-    for i in range(1, n + 1):
-        if n % i == 0:
-            factors.append(i)
-    return factors
 
 
 if __name__ == '__main__':
