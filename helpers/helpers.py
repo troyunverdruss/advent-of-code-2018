@@ -88,6 +88,15 @@ def get_min_max(points: List[Point]):
     max_y = max(points, key=lambda s: s.y).y
     return min_x, max_x, min_y, max_y
 
+def get_min_max_3d(points: List[Point3d]):
+    min_x = min(points, key=lambda s: s.x).x
+    max_x = max(points, key=lambda s: s.x).x
+    min_y = min(points, key=lambda s: s.y).y
+    max_y = max(points, key=lambda s: s.y).y
+    min_z = min(points, key=lambda s: s.z).z
+    max_z = max(points, key=lambda s: s.z).z
+    return min_x, max_x, min_y, max_y, min_z, max_z
+
 
 def manhattan_distance(a: Point, b: Point) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y)
