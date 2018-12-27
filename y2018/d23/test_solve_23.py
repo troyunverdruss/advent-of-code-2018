@@ -9,11 +9,6 @@ class TestSolve_23(TestCase):
         in_range = solve_23(nanobots)
         self.assertEqual(7, in_range)
 
-    def test_mine_1(self):
-        nanobots = parse_input('my-test-input.txt')
-        in_range = solve_23_part_2(nanobots)
-        self.assertEqual(7, in_range)
-
     def test_example_part_2(self):
         nanobots = parse_input('test-input-part-2.txt')
         distance = solve_23_part_2(nanobots)
