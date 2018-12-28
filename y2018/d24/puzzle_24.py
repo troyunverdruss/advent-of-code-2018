@@ -32,6 +32,7 @@ class ArmyGroup:
 
     def attack(self, other):
         if self.units <= 0:
+            print('Group was killed, not attacking. {}:{}'.format(self.type, self.display_id))
             return
 
         damage = other.potential_damage(self)
@@ -103,22 +104,35 @@ def run_round(armies, army_lookup):
         print('Army {}:{} has {} units'.format(army.type, army.display_id, army.units))
 
     targets = {}
-    for army in sorted(armies, key=lambda a: (a.effective_power(), a.initiative), reverse=True):
-        # find target
-        for enemy in sorted(
-                filter(lambda a: a.type == army.get_enemy(), armies),
-                key=lambda a: (a.potential_damage(army), a.effective_power(), a.initiative), reverse=True):
+    target_selection_order = sorted(filter(lambda a: a.units > 0, armies), key=lambda a: (a.effective_power(), a.initiative), reverse=True)
+    print('Target selection order:')
+    for a in target_selection_order:
+        print('{}:{} {}, {}'.format(a.type, a.display_id, a.effective_power(), a.initiative))
 
-            if enemy.id in targets.values():
+    for army in target_selection_order:
+        # find target
+        potential_targets = sorted(filter(lambda a: a.type == army.get_enemy() and a.units > 0, armies),
+                   key=lambda a: (a.potential_damage(army), a.effective_power(), a.initiative), reverse=True)
+
+        print('')
+        print('Potential targets:')
+        for a in potential_targets:
+            print('{}:{} would deal {} damage to {}:{} [{}, {}]'.format(army.type, army.display_id, a.potential_damage(army), a.type, a.display_id, a.effective_power(), a.initiative))
+
+        for enemy in potential_targets:
+
+            if enemy.id in targets.values() or enemy.potential_damage(army) == 0:
                 continue
 
-            print('Army {}:{} targets {}:{}'.format(army.type, army.display_id, enemy.type, enemy.display_id))
+            print('Army {}:{} [{}, {}] targets {}:{} [{}, {}, {}]'.format(army.type, army.display_id, army.effective_power(), army.initiative, enemy.type, enemy.display_id, enemy.potential_damage(army), enemy.effective_power(), enemy.initiative))
             targets[army.id] = enemy.id
             break
 
     # attack
+    print('')
     for army in sorted(armies, key=lambda a: a.initiative, reverse=True):
-        army.attack(army_lookup[targets[army.id]])
+        if army.id in targets:
+            army.attack(army_lookup[targets[army.id]])
 
 
 def solve_24(armies):
@@ -132,18 +146,26 @@ def solve_24(armies):
 
     while len(immune) > 0 and len(infection) > 0:
         round += 1
+        print('')
         print('Round {}'.format(round))
         run_round(armies, army_lookup)
 
         # Clean up dead armies
+        imm_units = 0
         for army in immune:
             if army.units <= 0:
                 immune.remove(army)
+            else:
+                imm_units += army.units
 
+        inf_units = 0
         for army in infection:
             if army.units <= 0:
                 infection.remove(army)
+            else:
+                inf_units += army.units
 
+        print('End of round: {} Imm: {}, Inf: {}'.format(round, imm_units, inf_units))
         if len(immune) <= 0 or len(infection) <= 0:
             break
 
@@ -157,4 +179,21 @@ def solve_24(armies):
 
 if __name__ == '__main__':
     armies = parse_input('input.txt')
-    i = 0
+    units = solve_24(armies)
+    print('Surviving units: {}'.format(units))
+
+    # 32167 too low
+    # 32179 too low
+    # 38008 -> maybe?
+
+# Possible correct data
+# End of round: 1 Imm: 24188, Inf: 43250
+# End of round: 2 Imm: 24096, Inf: 43201
+# End of round: 3 Imm: 24003, Inf: 43155
+# End of round: 4 Imm: 23910, Inf: 43109
+# End of round: 5 Imm: 23818, Inf: 43064
+# End of round: 6 Imm: 23726, Inf: 43019
+# End of round: 7 Imm: 23634, Inf: 42975
+# End of round: 8 Imm: 23542, Inf: 42931
+# End of round: 9 Imm: 23450, Inf: 42887
+# End of round: 10 Imm: 23359, Inf: 42844
