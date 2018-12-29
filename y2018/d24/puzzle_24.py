@@ -99,10 +99,12 @@ def run_round(armies, army_lookup):
             army.attack(army_lookup[targets[army.id]])
 
 
-def solve_24(armies):
+def solve_24(armies, boost=0):
     army_lookup = {}
     for army in armies:
         army_lookup[army.id] = army
+        if army.type == 'imm':
+            army.attack_strength += boost
 
     round = 0
     immune = list(filter(lambda a: a.type == 'imm', armies))
@@ -138,7 +140,11 @@ def solve_24(armies):
         if army.units > 0:
             result += army.units
 
-    return result
+    immune_system_wins = False
+    if len(immune) > 0:
+        immune_system_wins = True
+
+    return result, immune_system_wins
 
 
 def parse_input(entries):
@@ -174,8 +180,6 @@ def parse_input(entries):
             results.append(a)
             id += 1
             display_id += 1
-        else:
-            print('No match? {}'.format(entry))
 
     return results
 
@@ -202,5 +206,9 @@ def parse_special(special_str):
 if __name__ == '__main__':
     entries = read_raw_entries('input.txt')
     armies = parse_input(entries)
-    units = solve_24(armies)
+    units, immune_system_wins = solve_24(armies)
     print('Surviving units: {}'.format(units))
+    if immune_system_wins:
+        print('Immune system wins!')
+    else:
+        print('Immune system loses :(')
