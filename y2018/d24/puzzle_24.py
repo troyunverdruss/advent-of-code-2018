@@ -1,3 +1,6 @@
+import sys
+
+sys.path.append('/Users/troy/Documents/code/advent-of-code')
 from helpers.helpers import read_raw_entries
 import re
 
@@ -14,8 +17,6 @@ class ArmyGroup:
         self.attack_strength = int(attack_strength)
         self.attack_type = attack_type
         self.initiative = int(initiative)
-
-        # print(self)
 
     def __str__(self):
         return '{} {} {} {} {} {} {} {}'.format(
@@ -45,25 +46,25 @@ class ArmyGroup:
         return 'imm'
 
     def targeting_priority(self):
-        return (-self.effective_power(), -self.initiative)
+        return -self.effective_power(), -self.initiative
 
     def attack_priority(self):
-        return (-self.initiative)
+        return -self.initiative
 
     def damage_priority(self, other):
         if other.units == 0:
-            return (0, 0, 0)
+            return 0, 0, 0
         if self.get_enemy() != other.type:
-            return (0, 0, 0)
+            return 0, 0, 0
         if self.attack_type in other.immune_to:
-            return (0, 0, 0)
+            return 0, 0, 0
 
         if self.attack_type in other.weak_to:
             damage = self.effective_power() * 2
         else:
             damage = self.effective_power()
 
-        return (damage, other.effective_power(), other.initiative)
+        return damage, other.effective_power(), other.initiative
 
     def select_target(self, targets, others):
         sorted_targets = sorted(filter(lambda o: self.damage_priority(o)[0] > 0, others),
@@ -110,10 +111,12 @@ def solve_24(armies, boost=0):
     immune = list(filter(lambda a: a.type == 'imm', armies))
     infection = list(filter(lambda a: a.type == 'inf', armies))
 
+    stalemate_count = 0
+    imm_units = 0
+    inf_units = 0
+    last_total_units = sum(map(lambda a: a.units, armies))
     while len(immune) > 0 and len(infection) > 0:
         round += 1
-        print('')
-        print('Round {}'.format(round))
         run_round(armies, army_lookup)
 
         # Clean up dead armies
@@ -131,9 +134,20 @@ def solve_24(armies, boost=0):
             else:
                 inf_units += army.units
 
-        print('End of round: {} Imm: {}, Inf: {}'.format(round, imm_units, inf_units))
         if len(immune) <= 0 or len(infection) <= 0:
             break
+
+        if imm_units != 0 and inf_units != 0 and imm_units + inf_units == last_total_units:
+            print('Stalemate with boost {}. Imm {} Inf {}'.format(boost, imm_units, inf_units))
+            stalemate_count += 1
+        else:
+            stalemate_count = 0
+        last_total_units = imm_units + inf_units
+
+        if stalemate_count > 2:
+            break
+
+    print('Final counts: imm: {} inf: {}'.format(imm_units, inf_units))
 
     result = 0
     for army in armies:
@@ -141,7 +155,7 @@ def solve_24(armies, boost=0):
             result += army.units
 
     immune_system_wins = False
-    if len(immune) > 0:
+    if len(immune) > 0 and len(infection) == 0:
         immune_system_wins = True
 
     return result, immune_system_wins
@@ -212,3 +226,11 @@ if __name__ == '__main__':
         print('Immune system wins!')
     else:
         print('Immune system loses :(')
+
+    boost = 0
+    while not immune_system_wins:
+        boost += 1
+        armies = parse_input(entries)
+        units, immune_system_wins = solve_24(armies, boost)
+
+    print('Immune system wins with boost: {}, leaving: {} units'.format(boost, units))
