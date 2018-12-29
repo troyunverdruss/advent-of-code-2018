@@ -3,17 +3,38 @@ import re
 
 
 class ArmyGroup:
-    def __init__(self, id, display_id, type, units, hp, attack_strength, attack_type, initiative):
+    def __init__(self, id, display_id, type, units, hp, weak_to, immune_to, attack_strength, attack_type, initiative):
         self.id = id
         self.display_id = display_id
         self.type = type
         self.units = int(units)
         self.hp = int(hp)
-        self.weak_to = []
-        self.immune_to = []
+        self.weak_to = weak_to
+        self.immune_to = immune_to
         self.attack_strength = int(attack_strength)
         self.attack_type = attack_type
         self.initiative = int(initiative)
+
+        # print(self)
+
+    def __str__(self):
+        return '{} {} {} {} {} {} {} {}'.format(
+            self.type,
+            self.units,
+            self.hp,
+            self.weak_to,
+            self.immune_to,
+            self.attack_strength,
+            self.attack_type,
+            self.initiative
+        )
+
+    def __eq__(self, other):
+        return self.id == other.id and self.display_id == other.display_id \
+               and self.type == other.type and self.units == other.units \
+               and self.hp == other.hp and self.weak_to == other.weak_to \
+               and self.immune_to == other.immune_to and self.attack_strength == other.attack_strength \
+               and self.attack_type == other.attack_type and self.initiative == other.initiative
 
     def effective_power(self):
         return self.units * self.attack_strength
@@ -23,114 +44,57 @@ class ArmyGroup:
             return 'inf'
         return 'imm'
 
-    def potential_damage(self, other):
-        if other.attack_type in self.immune_to:
-            return 0
-        if other.attack_type in self.weak_to:
-            return other.effective_power() * 2
-        return other.effective_power()
+    def targeting_priority(self):
+        return (-self.effective_power(), -self.initiative)
+
+    def attack_priority(self):
+        return (-self.initiative)
+
+    def damage_priority(self, other):
+        if other.units == 0:
+            return (0, 0, 0)
+        if self.get_enemy() != other.type:
+            return (0, 0, 0)
+        if self.attack_type in other.immune_to:
+            return (0, 0, 0)
+
+        if self.attack_type in other.weak_to:
+            damage = self.effective_power() * 2
+        else:
+            damage = self.effective_power()
+
+        return (damage, other.effective_power(), other.initiative)
+
+    def select_target(self, targets, others):
+        sorted_targets = sorted(filter(lambda o: self.damage_priority(o)[0] > 0, others),
+                                key=lambda o: self.damage_priority(o),
+                                reverse=True)
+        for a in sorted_targets:
+            if a.id in targets.values():
+                continue
+
+            targets[self.id] = a.id
+            break
 
     def attack(self, other):
         if self.units <= 0:
-            print('Group was killed, not attacking. {}:{}'.format(self.type, self.display_id))
             return
 
-        damage = other.potential_damage(self)
+        damage = self.damage_priority(other)[0]
 
         units_killed = damage // other.hp
-        other.units -= units_killed
-        print('Army {}:{} attacks {}:{} and deals {} damage, killing {} units'.format(self.type, self.display_id, other.type, other.display_id, damage, units_killed))
-
-
-def parse_input(input):
-    entries = read_raw_entries(input)
-
-    pattern = re.compile(
-        r'(\d+) units each with (\d+) hit points \((.*)\) with an attack that does (\d+) (\w+) damage at initiative (\d+)')
-
-    results = []
-
-    current_army = None
-    id = 0
-    display_id = 0
-    for entry in entries:
-        if entry.startswith('Immune System'):
-            current_army = 'imm'
-            display_id = 1
-        elif entry.startswith('Infection'):
-            current_army = 'inf'
-            display_id = 1
-
-        matcher = pattern.match(entry)
-        if matcher:
-            units = matcher.group(1)
-            hp = matcher.group(2)
-            special_details = matcher.group(3)
-            attack_strength = matcher.group(4)
-            attack_type = matcher.group(5)
-            initiative = matcher.group(6)
-
-            a = ArmyGroup(id, display_id, current_army, units, hp, attack_strength, attack_type, initiative)
-            special = parse_special(special_details)
-            a.immune_to = special['immune']
-            a.weak_to = special['weak']
-
-            results.append(a)
-            id += 1
-            display_id += 1
-
-    return results
-
-
-def parse_special(special_str):
-    results = {
-        'immune': [],
-        'weak': []
-    }
-    pattern = re.compile(r'\s*(immune|weak) to (.*)')
-
-    for special in special_str.split(';'):
-        matcher = pattern.match(special)
-
-        if matcher:
-            for s in matcher.group(2).split(','):
-                results[matcher.group(1)].append(s.strip())
-
-    return results
+        other.units = max(0, other.units - units_killed)
 
 
 def run_round(armies, army_lookup):
-    for army in armies:
-        print('Army {}:{} has {} units'.format(army.type, army.display_id, army.units))
-
     targets = {}
-    target_selection_order = sorted(filter(lambda a: a.units > 0, armies), key=lambda a: (a.effective_power(), a.initiative), reverse=True)
-    print('Target selection order:')
-    for a in target_selection_order:
-        print('{}:{} {}, {}'.format(a.type, a.display_id, a.effective_power(), a.initiative))
 
-    for army in target_selection_order:
-        # find target
-        potential_targets = sorted(filter(lambda a: a.type == army.get_enemy() and a.units > 0, armies),
-                   key=lambda a: (a.potential_damage(army), a.effective_power(), a.initiative), reverse=True)
-
-        print('')
-        print('Potential targets:')
-        for a in potential_targets:
-            print('{}:{} would deal {} damage to {}:{} [{}, {}]'.format(army.type, army.display_id, a.potential_damage(army), a.type, a.display_id, a.effective_power(), a.initiative))
-
-        for enemy in potential_targets:
-
-            if enemy.id in targets.values() or enemy.potential_damage(army) == 0:
-                continue
-
-            print('Army {}:{} [{}, {}] targets {}:{} [{}, {}, {}]'.format(army.type, army.display_id, army.effective_power(), army.initiative, enemy.type, enemy.display_id, enemy.potential_damage(army), enemy.effective_power(), enemy.initiative))
-            targets[army.id] = enemy.id
-            break
+    # selection
+    for army in sorted(armies, key=lambda a: a.targeting_priority()):
+        army.select_target(targets, armies)
 
     # attack
-    print('')
-    for army in sorted(armies, key=lambda a: a.initiative, reverse=True):
+    for army in sorted(armies, key=lambda a: a.attack_priority()):
         if army.id in targets:
             army.attack(army_lookup[targets[army.id]])
 
@@ -177,23 +141,66 @@ def solve_24(armies):
     return result
 
 
+def parse_input(entries):
+    pattern = re.compile(
+        r'(\d+) units each with (\d+) hit points(.*)with an attack that does (\d+) (\w+) damage at initiative (\d+)')
+
+    results = []
+
+    current_army = None
+    id = 0
+    display_id = 0
+    for entry in entries:
+        if entry.startswith('Immune System'):
+            current_army = 'imm'
+            display_id = 1
+        elif entry.startswith('Infection'):
+            current_army = 'inf'
+            display_id = 1
+
+        matcher = pattern.match(entry)
+        if matcher:
+            units = matcher.group(1)
+            hp = matcher.group(2)
+            special_details = matcher.group(3)
+            attack_strength = matcher.group(4)
+            attack_type = matcher.group(5)
+            initiative = matcher.group(6)
+
+            special = parse_special(special_details)
+            a = ArmyGroup(id, display_id, current_army, units, hp, special['weak'], special['immune'], attack_strength,
+                          attack_type, initiative)
+
+            results.append(a)
+            id += 1
+            display_id += 1
+        else:
+            print('No match? {}'.format(entry))
+
+    return results
+
+
+def parse_special(special_str):
+    results = {
+        'immune': [],
+        'weak': []
+    }
+    pattern = re.compile(r'\s*(immune|weak) to (.*)')
+
+    for special in special_str.split(';'):
+        special = special.replace('(', '')
+        special = special.replace(')', '')
+        matcher = pattern.match(special)
+
+        if matcher:
+            for s in matcher.group(2).split(','):
+                results[matcher.group(1)].append(s.strip())
+
+    return results
+
+
 if __name__ == '__main__':
-    armies = parse_input('input.txt')
+    entries = read_raw_entries('input.txt')
+    armies = parse_input(entries)
     units = solve_24(armies)
     print('Surviving units: {}'.format(units))
-
-    # 32167 too low
-    # 32179 too low
-    # 38008 -> maybe?
-
-# Possible correct data
-# End of round: 1 Imm: 24188, Inf: 43250
-# End of round: 2 Imm: 24096, Inf: 43201
-# End of round: 3 Imm: 24003, Inf: 43155
-# End of round: 4 Imm: 23910, Inf: 43109
-# End of round: 5 Imm: 23818, Inf: 43064
-# End of round: 6 Imm: 23726, Inf: 43019
-# End of round: 7 Imm: 23634, Inf: 42975
-# End of round: 8 Imm: 23542, Inf: 42931
-# End of round: 9 Imm: 23450, Inf: 42887
-# End of round: 10 Imm: 23359, Inf: 42844
