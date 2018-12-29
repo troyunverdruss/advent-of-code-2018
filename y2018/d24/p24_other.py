@@ -33,6 +33,20 @@ class Group:
         self.attacker = None
         self.target = None
 
+        print(self)
+
+    def __str__(self):
+        return '{} {} {} {} {} {} {} {}'.format(
+            self.side,
+            self.units,
+            self.hp,
+            self.weak,
+            self.immune,
+            self.attack,
+            self.attack_type,
+            self.initiative
+        )
+
     def clear(self):
         self.attacker = None
         self.target = None
@@ -47,6 +61,7 @@ class Group:
             self.target = max(cands, key=lambda group: self.damage_prio(group))
             assert self.target.attacker is None
             self.target.attacker = self
+            print('{} targets \n{}'.format(self, self.target))
 
     def effective_power(self):
         return self.units * self.attack
@@ -69,14 +84,17 @@ class Group:
         killed = total_attack // target.hp
         target.units = max(0, target.units - killed)
 
+        print('Army {}:{}:{} attacks {}:{} and deals {} damage, killing {} units'.format(self.initiative, self.side, 0,
+                                                                                      target.side, 1,
+                                                                                      total_attack, killed))
 
-# immune_system_input = """17 5390 weak radiation bludgeoning;4507 fire 2
+                                                                                      # immune_system_input = """17 5390 weak radiation bludgeoning;4507 fire 2
 # 989 1274 immune fire weak bludgeoning slashing;25 slashing 3"""
 #
 # infection_input = """801 4706 weak radiation;116 bludgeoning 1
 # 4485 2961 immune radiation weak fire cold;12 slashing 4"""
 
-immune_system_input = """5711 6662 immune fire weak slashing;9 bludgeoning 14
+immune_system_input = '''5711 6662 immune fire weak slashing;9 bludgeoning 14
 2108 8185 weak radiation bludgeoning;36 slashing 13
 1590 3940;24 cold 5
 2546 6960;25 slashing 2
@@ -85,9 +103,9 @@ immune_system_input = """5711 6662 immune fire weak slashing;9 bludgeoning 14
 6792 6242 immune slashing weak bludgeoning radiation;9 slashing 18
 3336 12681 weak slashing;28 fire 6
 752 5272 immune slashing weak bludgeoning radiation;69 radiation 4
-96 7266 immune fire;738 bludgeoning 8"""
+96 7266 immune fire;738 bludgeoning 8'''
 
-infection_input = """1492 47899 weak fire slashing immune cold;56 bludgeoning 15
+infection_input = '''1492 47899 weak fire slashing immune cold;56 bludgeoning 15
 3065 39751 weak bludgeoning slashing;20 slashing 1
 7971 35542 weak bludgeoning radiation;8 bludgeoning 10
 585 5936 weak cold immune fire;17 slashing 17
@@ -96,7 +114,7 @@ infection_input = """1492 47899 weak fire slashing immune cold;56 bludgeoning 15
 329 31704 weak fire immune cold radiation;179 bludgeoning 16
 6961 11069 weak fire;2 radiation 20
 2837 29483 weak cold;20 bludgeoning 9
-8714 7890;1 cold 3"""
+8714 7890;1 cold 3'''
 
 
 def solve(boost):
