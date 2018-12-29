@@ -81,12 +81,42 @@ class Point3d:
         return '{}({},{},{})'.format(self.id, self.x, self.y, self.z)
 
 
+class Point4d:
+    def __init__(self, x=None, y=None, z=None, t=None, id=''):
+        self.id = id
+        self.x = int(x)
+        self.y = int(y)
+        self.z = int(z)
+        self.t = int(t)
+
+    def __add__(self, other):
+        return Point4d(self.x + other.x, self.y + other.y, self.z + other.z, self.t + other.t)
+
+    def __sub__(self, other):
+        return Point4d(self.x - other.x, self.y - other.y, self.z - other.z, self.t - other.t)
+
+    def __eq__(self, other):
+        if type(other) != Point3d:
+            return False
+        return self.x == other.x and self.y == other.y and self.z == other.z and self.t == other.t
+
+    def __repr__(self):
+        return repr('{}({},{},{},{})'.format(self.id, self.x, self.y, self.z, self.t))
+
+    def __hash__(self):
+        return hash('{}({},{},{},{})'.format(self.id, self.x, self.y, self.z, self.t))
+
+    def __str__(self):
+        return '{}({},{},{},{})'.format(self.id, self.x, self.y, self.z, self.t)
+
+
 def get_min_max(points: List[Point]):
     min_x = min(points, key=lambda s: s.x).x
     max_x = max(points, key=lambda s: s.x).x
     min_y = min(points, key=lambda s: s.y).y
     max_y = max(points, key=lambda s: s.y).y
     return min_x, max_x, min_y, max_y
+
 
 def get_min_max_3d(points: List[Point3d]):
     min_x = min(points, key=lambda s: s.x).x
@@ -104,3 +134,7 @@ def manhattan_distance(a: Point, b: Point) -> int:
 
 def manhattan_distance_3d(a: Point3d, b: Point3d) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)
+
+
+def manhattan_distance_4d(a: Point4d, b: Point4d) -> int:
+    return abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z) + abs(a.t - b.t)
