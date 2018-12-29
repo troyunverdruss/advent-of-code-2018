@@ -8,8 +8,16 @@ class TestSolve_24(TestCase):
     def test_example_1(self):
         entries = read_raw_entries('test-input.txt')
         armies = parse_input(entries)
-        r = solve_24(armies)
+        r, imm_system_wins = solve_24(armies)
         self.assertEqual(5216, r)
+        self.assertFalse(imm_system_wins)
+
+    def test_example_2_with_boost(self):
+        entries = read_raw_entries('test-input.txt')
+        armies = parse_input(entries)
+        r, imm_system_wins = solve_24(armies, 1570)
+        self.assertEqual(51, r)
+        self.assertTrue(imm_system_wins)
 
     def test_parse_1(self):
         s = [
