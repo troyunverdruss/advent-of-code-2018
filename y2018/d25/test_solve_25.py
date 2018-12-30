@@ -24,7 +24,7 @@ class TestSolve_25(TestCase):
         c = solve_25(points)
         self.assertEqual(3, c)
 
-    def test_example_4(self):
+    def     test_example_4(self):
         points = parse_input('test-input-4.txt')
         c = solve_25(points)
         self.assertEqual(8, c)
