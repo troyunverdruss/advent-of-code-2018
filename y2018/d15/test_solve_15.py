@@ -1,7 +1,7 @@
 from unittest import TestCase, skip
 from y2018.d15.puzzle_15 import solve_15, parse_map, Fighter, sort_fighters, print_state, \
     find_possible_destinations, find_accessible_areas_from_point, fill_temp_map, filter_enemies, \
-    filter_possible_destinations, compute_best_path, select_by_reading_order
+    filter_possible_destinations, select_by_reading_order
 from helpers.helpers import read_raw_entries, Point
 
 
@@ -177,3 +177,11 @@ class TestSolve_15(TestCase):
         self.assertEqual(18740, r)
         r, s = solve_15('tests/sample-6.txt', 34, False)
         self.assertEqual(1140, r)
+
+    def test_real_part_1(self):
+        r, s = solve_15('input.txt')
+        self.assertEqual(227290, r)
+
+    def test_real_part_2(self):
+        r, s = solve_15('input.txt', elf_strength=25, allow_elves_to_die=False)
+        self.assertEqual(53725, r)
