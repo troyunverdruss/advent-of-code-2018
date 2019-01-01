@@ -120,10 +120,10 @@ def solve_9_with_deque(input: str, multiplier: int = 1):
 
 
 if __name__ == '__main__':
-    input = read_raw_entries('input.txt')[0].strip()
+    input = read_raw_entries(__file__, 'input.txt')[0].strip()
     r = solve_9(input, 1)
     print('9a. Winning score: {}'.format(r))
 
-    input = read_raw_entries('input.txt')[0].strip()
+    input = read_raw_entries(__file__, 'input.txt')[0].strip()
     r = solve_9(input, 100)
     print('9b. Winning score: {}'.format(r))

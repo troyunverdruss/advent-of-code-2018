@@ -5,8 +5,7 @@ from typing import List
 class GridCell:
     def __init__(self, x, y):
         self.point_id = None
-        p = Point()
-        p.x, p.y = x, y
+        p = Point(x, y)
         self.location = p
         self.distances = {}
 
@@ -51,8 +50,8 @@ def convert_points(entries: List[str]) -> List[Point]:
     points = []
     i = 0
     for entry in entries:
-        p = Point()
-        p.x, p.y = map(lambda v: int(v), entry.split(','))
+        x, y = map(lambda v: int(v), entry.split(','))
+        p = Point(x, y)
         p.id = i
         points.append(p)
         i += 1
@@ -122,14 +121,14 @@ def solve_6b(points, threshold):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     points = convert_points(entries)
 
     r = solve_6a(points)
 
     print('Largest size: {}'.format(r))
 
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     points = convert_points(entries)
 
     r = solve_6b(points, 10000)

@@ -82,7 +82,7 @@ def solve_23_part_2(nanobots: List[Nanobot]):
 
 def parse_input(input):
     global nanobots
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
     p = re.compile(r'pos=<(-?\d+),(-?\d+),(-?\d+)>, r=(\d+)')
     nanobots = []
     for entry in entries:

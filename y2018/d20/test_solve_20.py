@@ -42,8 +42,8 @@ class TestSolve_20(TestCase):
         d = solve_20('^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$')
         self.assertEqual(31, d)
 
-    # @skip
-    def test_load_gml(self):
+    @skip
+    def test_load_gml_for_debugging(self):
         g: nx.DiGraph = nx.read_gml('real-nodes.gml', destringizer=self.make_points)
         all_paths = nx.single_source_shortest_path(g, source=Point(0,0))
 

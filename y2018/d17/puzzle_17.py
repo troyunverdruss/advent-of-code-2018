@@ -8,7 +8,7 @@ from anytree import Node, RenderTree, search as at_search
 
 
 def parse_real_input(input):
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
     points = []
     for entry in entries:
         parts = entry.split()

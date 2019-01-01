@@ -19,7 +19,7 @@ def solve_19(input, initial_registers=None):
            'borr': borr(), 'bori': bori(), 'setr': setr(), 'seti': seti(), 'gtir': gtir(), 'gtri': gtri(),
            'gtrr': gtrr(), 'eqir': eqir(), 'eqri': eqri(), 'eqrr': eqrr()}
 
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
     instruction_pointer_loc = int(entries.pop(0).split()[1])
     instructions = {}
     for i in range(len(entries)):

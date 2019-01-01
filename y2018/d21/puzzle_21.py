@@ -10,7 +10,7 @@ def solve_21():
            'borr': borr(), 'bori': bori(), 'setr': setr(), 'seti': seti(), 'gtir': gtir(), 'gtri': gtri(),
            'gtrr': gtrr(), 'eqir': eqir(), 'eqri': eqri(), 'eqrr': eqrr()}
 
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
 
     instruction_pointer_loc = int(entries.pop(0).split()[1])
 

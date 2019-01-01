@@ -21,7 +21,7 @@ def find_dupe(freqs, current_freq, entry):
 
 
 def run_puzzle(input):
-    entries = read_numeric_entries(input)
+    entries = read_numeric_entries(__file__, input)
 
     freqs = {0: True}
     current_freq = CurrentFreq()

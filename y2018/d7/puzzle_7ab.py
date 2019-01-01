@@ -113,13 +113,13 @@ def solve_7b(steps: Dict[str, Step], worker_count: int) -> int:
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     steps = process_into_steps(entries, 0)
 
     r = solve_7a(steps)
     print('The order of the steps: {}'.format(r))
 
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     steps = process_into_steps(entries, 60)
 
     r = solve_7b(steps, 5)

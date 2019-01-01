@@ -56,10 +56,10 @@ def solve_5b(polymer):
     return shortest_polymer
 
 if __name__ == '__main__':
-    polymer = read_raw_entries('input.txt')[0]
+    polymer = read_raw_entries(__file__, 'input.txt')[0]
     result = solve_try_1(polymer)
     print('Compressed polymer length: {}'.format(len(result)))
 
-    polymer = read_raw_entries('input.txt')[0]
+    polymer = read_raw_entries(__file__, 'input.txt')[0]
     result = solve_5b(polymer)
     print('Shortest possible compressed polymer length: {}'.format(result))

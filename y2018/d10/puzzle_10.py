@@ -34,7 +34,7 @@ class Star:
 
 
 def read_stars(input: str):
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
 
     stars = []
     for entry in entries:

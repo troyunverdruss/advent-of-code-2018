@@ -5,14 +5,14 @@ from y2018.d7.puzzle_7ab import process_into_steps, solve_7a, solve_7b
 
 class TestSolve_7a(TestCase):
     def test_solve_7a(self):
-        entries = read_raw_entries('test-input.txt')
-        steps = process_into_steps(entries)
+        entries = read_raw_entries(__file__, 'test-input.txt')
+        steps = process_into_steps(entries, 0)
         r = solve_7a(steps)
 
         self.assertEqual('CABDFE', r)
 
     def test_solve_7b(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         steps = process_into_steps(entries, 0)
         r = solve_7b(steps, 2)
 

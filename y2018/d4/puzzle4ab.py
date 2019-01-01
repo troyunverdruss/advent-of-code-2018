@@ -145,11 +145,11 @@ def solve_puzzle_4b(entries):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input-sorted.txt')
+    entries = read_raw_entries(__file__, 'input-sorted.txt')
     guard_id, sleepiest_min = solve_puzzle_4a(entries)
     print('Guard ID: {}, sleepiest min: {}, checksum: {}'.format(guard_id, sleepiest_min, guard_id * sleepiest_min))
 
-    entries = read_raw_entries('input-sorted.txt')
+    entries = read_raw_entries(__file__, 'input-sorted.txt')
     guard_id, minute = solve_puzzle_4b(entries)
     print('Guard ID: {}, sleepiest min: {}, checksum: {}'.format(guard_id, minute, guard_id * minute))
 

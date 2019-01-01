@@ -5,14 +5,14 @@ from helpers.helpers import read_raw_entries, manhattan_distance
 
 class TestSolve_6a(TestCase):
     def test_solve_6a(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         points = convert_points(entries)
 
         r = solve_6a(points)
         self.assertEqual(17, r)
 
     def test_solve_6b(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         points = convert_points(entries)
 
         r = solve_6b(points, 32)
