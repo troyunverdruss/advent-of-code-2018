@@ -6,14 +6,14 @@ from y2018.d24.puzzle_24 import solve_24, parse_input, ArmyGroup
 
 class TestSolve_24(TestCase):
     def test_example_1(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         armies = parse_input(entries)
         r, imm_system_wins = solve_24(armies)
         self.assertEqual(5216, r)
         self.assertFalse(imm_system_wins)
 
     def test_example_2_with_boost(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         armies = parse_input(entries)
         r, imm_system_wins = solve_24(armies, 1570)
         self.assertEqual(51, r)

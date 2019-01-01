@@ -400,7 +400,7 @@ def solve_16_part_2(entries, opcodes):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input-part1.txt')
+    entries = read_raw_entries(__file__, 'input-part1.txt')
     samples = parse_samples(entries)
 
     opcodes = [addr(), addi(), mulr(), muli(), banr(), bani(), borr(), bori(), setr(), seti(), gtir(), gtri(), gtrr(),
@@ -413,6 +413,6 @@ if __name__ == '__main__':
 
     # 547, 556, 542
 
-    entries = read_raw_entries("input-part2.txt")
+    entries = read_raw_entries(__file__, "input-part2.txt")
     r = solve_16_part_2(entries, opcodes)
     print('Result: {}'.format(r))

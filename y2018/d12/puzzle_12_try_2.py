@@ -74,7 +74,7 @@ def solve_12(entries):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_12(entries)
     print(r)
 

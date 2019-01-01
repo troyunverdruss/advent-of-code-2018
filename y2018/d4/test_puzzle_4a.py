@@ -6,7 +6,7 @@ import datetime
 
 class TestProcess_shifts(TestCase):
     def test_process_shifts(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
 
         shifts = process_shifts(entries)
         self.assertEqual(5, len(shifts))
@@ -27,7 +27,7 @@ class TestProcess_shifts(TestCase):
         self.assertEqual(list(range(5, 25)) + list(range(30, 55)), shifts[0].list_of_mins())
 
     def test_find_most_sleepy_guard(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         shifts = process_shifts(entries)
 
         guard, mins_asleep = find_most_sleepy_guard(shifts)
@@ -36,7 +36,7 @@ class TestProcess_shifts(TestCase):
         self.assertEqual(50, mins_asleep)
 
     def test_find_most_sleepy_minute(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         shifts = process_shifts(entries)
 
         guard, mins_asleep = find_most_sleepy_guard(shifts)
@@ -46,13 +46,13 @@ class TestProcess_shifts(TestCase):
         self.assertEqual(24, min)
 
     def test_solve_puzzle_4a(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
 
         guard_id, sleepiest_min = solve_puzzle_4a(entries)
         self.assertEqual(240, guard_id * sleepiest_min)
 
     def test_solve_puzzle_4b(self):
-        entries = read_raw_entries('test-input.txt')
+        entries = read_raw_entries(__file__, 'test-input.txt')
         guard_id, most_asleep_min = solve_puzzle_4b(entries)
         self.assertEqual(4455, guard_id * most_asleep_min)
 

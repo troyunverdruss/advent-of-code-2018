@@ -115,7 +115,7 @@ def solve_22_part_2(depth, target):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     depth = int(entries[0].split()[1])
     x, y = entries[1].split()[1].split(',')
     target = Point(int(x), int(y))

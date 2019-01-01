@@ -158,10 +158,10 @@ def compute_part_a(grid):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_18(entries)
     print(r)
 
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_18(entries, 1000000000)
     print(r)

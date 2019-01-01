@@ -25,7 +25,7 @@ class TestSolve_11(TestCase):
         self.assertEqual(33, r.x)
         self.assertEqual(45, r.y)
 
-    def test_1(self):
+    def test_2(self):
         r = solve_11(42, 3, 3)
         self.assertEqual(21, r.x)
         self.assertEqual(61, r.y)

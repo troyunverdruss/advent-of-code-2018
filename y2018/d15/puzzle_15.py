@@ -202,7 +202,7 @@ def find_accessible_areas_from_point(start: Point, filled_map, already_known):
 
 
 def solve_15(input, elf_strength=3, allow_elves_to_die=True):
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
     grid_map, elves, goblins = parse_map(entries)
 
     total_elves = len(elves)

@@ -52,7 +52,7 @@ class TestSolve_17(TestCase):
         self.assertEqual(177, r)
 
     def parse_ascii_input(self, input):
-        entries = read_raw_entries(input)
+        entries = read_raw_entries(__file__, input)
         points = []
         grid = []
         for entry in entries:

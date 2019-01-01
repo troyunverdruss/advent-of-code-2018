@@ -167,8 +167,8 @@ def get_result(state):
 
 
 def debug_difference():
-    entries_1 = read_raw_entries('input.txt')
-    entries_2 = read_raw_entries('input.txt')
+    entries_1 = read_raw_entries(__file__, 'input.txt')
+    entries_2 = read_raw_entries(__file__, 'input.txt')
     state_1, rules_1 = process_input(entries_1)
     state_2, rules_2 = process_input(entries_2)
 
@@ -195,7 +195,7 @@ def debug_difference():
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_12(entries)
     # print(r)
     # 3738

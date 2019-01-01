@@ -16,7 +16,7 @@ class Path:
 class TestSolve_15(TestCase):
     @skip
     def test_target_selection(self):
-        entries = read_raw_entries('tests/target_selection/start_map.txt')
+        entries = read_raw_entries(__file__, 'tests/target_selection/start_map.txt')
         grid_map, elves, goblins = parse_map(entries)
 
         print_state('Initial', grid_map, elves, goblins)
@@ -30,7 +30,7 @@ class TestSolve_15(TestCase):
 
     @skip
     def test_movement(self):
-        entries = read_raw_entries('tests/movement.txt')
+        entries = read_raw_entries(__file__, 'tests/movement.txt')
         grid_map, elves, goblins = parse_map(entries)
 
         print_state('Initial', grid_map, elves, goblins)
@@ -45,8 +45,8 @@ class TestSolve_15(TestCase):
 
     @skip
     def test_path_1(self):
-        entries = read_raw_entries('tests/path-1.txt')
-        entries = read_raw_entries('tests/path-1.txt')
+        entries = read_raw_entries(__file__, 'tests/path-1.txt')
+        entries = read_raw_entries(__file__, 'tests/path-1.txt')
         grid_map, elves, goblins = parse_map(entries)
 
         goblin = goblins[0]
@@ -65,7 +65,7 @@ class TestSolve_15(TestCase):
 
     @skip
     def test_path_2(self):
-        entries = read_raw_entries('tests/path-2.txt')
+        entries = read_raw_entries(__file__, 'tests/path-2.txt')
         grid_map, elves, goblins = parse_map(entries)
 
         goblin = goblins[0]
@@ -84,7 +84,7 @@ class TestSolve_15(TestCase):
 
     @skip
     def test_path_3(self):
-        entries = read_raw_entries('tests/path-3.txt')
+        entries = read_raw_entries(__file__, 'tests/path-3.txt')
         grid_map, elves, goblins = parse_map(entries)
 
         goblin = goblins[0]
@@ -140,7 +140,7 @@ class TestSolve_15(TestCase):
     @skip
     def test_find_aa(self):
         # Should be 88 locations
-        entries = read_raw_entries('tests/find-accessible-test.txt')
+        entries = read_raw_entries(__file__, 'tests/find-accessible-test.txt')
         grid_map, elves, goblins = parse_map(entries)
         filled_map = fill_temp_map(elves + goblins, grid_map)
 
@@ -178,10 +178,12 @@ class TestSolve_15(TestCase):
         r, s = solve_15('tests/sample-6.txt', 34, False)
         self.assertEqual(1140, r)
 
+    @skip
     def test_real_part_1(self):
         r, s = solve_15('input.txt')
         self.assertEqual(227290, r)
 
+    @skip
     def test_real_part_2(self):
         r, s = solve_15('input.txt', elf_strength=25, allow_elves_to_die=False)
         self.assertEqual(53725, r)

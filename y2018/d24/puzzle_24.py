@@ -218,7 +218,7 @@ def parse_special(special_str):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     armies = parse_input(entries)
     units, immune_system_wins = solve_24(armies)
     print('Surviving units: {}'.format(units))

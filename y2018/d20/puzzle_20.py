@@ -151,7 +151,7 @@ def process_inner_paren(last_loc, index, route, to_walk, depth):
 
 
 if __name__ == '__main__':
-    input = read_raw_entries('input.txt')
+    input = read_raw_entries(__file__, 'input.txt')
     r = solve_20(input[0].strip())
     print('Max distance: {}'.format(r))
 

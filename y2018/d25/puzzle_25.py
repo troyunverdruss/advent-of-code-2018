@@ -40,7 +40,7 @@ class Constellation:
         return False
 
 def parse_input(input):
-    entries = read_raw_entries(input)
+    entries = read_raw_entries(__file__, input)
     points = []
     for entry in entries:
         c = entry.split(',')

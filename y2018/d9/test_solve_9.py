@@ -80,11 +80,11 @@ class TestSolve9(TestCase):
 
 
     def run_python_dll(self):
-        input = read_raw_entries('input.txt')[0].strip()
+        input = read_raw_entries(__file__, 'input.txt')[0].strip()
         solve_9(input, 100)
 
     def run_python_deque(self):
-        input = read_raw_entries('input.txt')[0].strip()
+        input = read_raw_entries(__file__, 'input.txt')[0].strip()
         solve_9_with_deque(input, 100)
 
     @skip

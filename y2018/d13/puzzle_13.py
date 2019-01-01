@@ -78,7 +78,7 @@ class Cart:
 
 def parse_map(file):
     grid = []
-    lines = read_raw_entries(file, strip=False)
+    lines = read_raw_entries(__file__, file, strip=False)
 
     for line in lines:
         grid.append(list(line))

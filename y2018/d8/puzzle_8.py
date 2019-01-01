@@ -69,10 +69,10 @@ def solve_8b(input: str):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_8a(entries[0])
     print('Sum of metadata count: {}'.format(r))
 
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     r = solve_8b(entries[0])
     print('Root node value: {}'.format(r))

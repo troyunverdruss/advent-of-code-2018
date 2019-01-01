@@ -49,6 +49,6 @@ def run_puzzle(entries):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries('input.txt')
+    entries = read_raw_entries(__file__, 'input.txt')
     result = run_puzzle(entries)
     print('Found common letters: {}'.format(result))
