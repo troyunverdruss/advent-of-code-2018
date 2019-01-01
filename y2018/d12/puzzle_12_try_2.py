@@ -27,7 +27,7 @@ def padright(state: deque, count: int):
         state.append(Pot(state[len(state) - 1].id + 1, '.'))
 
 
-def solve_12(entries):
+def solve_12(entries, generations_to_run=20):
     pots = []
     i = 0
     entries[0] = entries[0].replace('initial state: ', '')
@@ -43,7 +43,7 @@ def solve_12(entries):
             rules[m.group(1).strip()] = m.group(2).strip()
 
     last_sum = 0
-    for i in range(110):
+    for i in range(generations_to_run):
         if '#' in map(lambda p: p.value, pots[:3]):
             padleft(pots, 2)
         if '#' in map(lambda p: p.value, pots[:-3]):
@@ -76,6 +76,9 @@ def solve_12(entries):
 if __name__ == '__main__':
     entries = read_raw_entries(__file__, 'input.txt')
     r = solve_12(entries)
+    print(r)
+
+    r = solve_12(entries, 200)
     print(r)
 
     # Correct answers
