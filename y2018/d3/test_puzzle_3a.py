@@ -1,5 +1,5 @@
 from unittest import TestCase
-from y2018.d3 import Claim, find_overlapping_square_inches, find_intact_claim
+from y2018.d3.puzzle3ab import Claim, find_overlapping_square_inches, find_intact_claim
 
 
 class TestClaim(TestCase):
