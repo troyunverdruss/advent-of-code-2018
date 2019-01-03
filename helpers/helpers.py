@@ -1,21 +1,23 @@
 from typing import List
 from pathlib import Path
 
-Path(__file__)
+
+def path(caller_file, path):
+    return Path(caller_file).parent.joinpath(path)
 
 
-def read_numeric_entries(caller_file, input):
+def read_numeric_entries(input):
     entries = []
-    with open(Path(caller_file).parent.joinpath(input), 'r', encoding='utf8') as f:
+    with open(input, 'r', encoding='utf8') as f:
         for line in f:
             entries.append(int(line.strip()))
 
     return entries
 
 
-def read_raw_entries(caller_file, input, strip=True):
+def read_raw_entries(input, strip=True):
     entries = []
-    with open(Path(caller_file).parent.joinpath(input), 'r', encoding='utf8') as f:
+    with open(input, 'r', encoding='utf8') as f:
         for line in f:
             if strip:
                 entries.append(line.strip())

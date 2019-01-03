@@ -28,7 +28,7 @@ def solve_2b(entries):
 
 
 if __name__ == '__main__':
-    entries = read_raw_entries(__file__, 'input.txt')
+    entries = read_raw_entries('input.txt')
     r = solve_2a(entries)
     print(r)
 

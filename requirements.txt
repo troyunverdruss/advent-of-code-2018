@@ -1,0 +1,4 @@
+anytree==2.4.3
+networkx==2.2
+z3==0.2.0
+z3-solver==4.8.0.0
