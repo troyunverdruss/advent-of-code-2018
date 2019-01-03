@@ -1,8 +1,9 @@
+from collections import defaultdict
+
 from helpers.helpers import Point
 
 GRID_SIZE = 300
 
-# todo need to fix this puzzle !!
 
 def compute_cell(point, serial_number):
     rack_id = point.x + 10
@@ -16,12 +17,11 @@ def compute_cell(point, serial_number):
 
 
 def fill_grid(serial_number):
-    grid = []
+    grid = defaultdict(dict)
 
-    for x in range(0, GRID_SIZE):
-        grid.append([])
-        for y in range(0, GRID_SIZE):
-            grid[x].append(compute_cell(Point(x, y), serial_number))
+    for x in range(0, GRID_SIZE + 1):
+        for y in range(0, GRID_SIZE + 1):
+            grid[x][y] = compute_cell(Point(x, y), serial_number)
 
     return grid
 
@@ -31,25 +31,24 @@ def fill_prefix_sum_grid(grid):
 
     for x in range(1, GRID_SIZE + 1):
         for y in range(1, GRID_SIZE + 1):
-            prefix_sum_grid[x][y] = prefix_sum_grid[x][y - 1] + prefix_sum_grid[x - 1][y] - prefix_sum_grid[x - 1][
-                y - 1] + grid[x - 1][y - 1]
+            prefix_sum_grid[x][y] = prefix_sum_grid[x][y - 1] \
+                                    + prefix_sum_grid[x - 1][y] \
+                                    - prefix_sum_grid[x - 1][y - 1] \
+                                    + grid[x][y]
 
     return prefix_sum_grid
 
 
 def compute_value_from_point(prefix_sum_grid, point, dimension):
-    # value = 0
+    # Subtracting 1 since we want the total side dimension to be "dimension" and we're starting from
+    # a fixed point:
+    # point: (1, 1) with dimension=3, we want the max coordinate to be (3, 3) since that is size 3 on a side: 1, 2, 3
+    _dim = dimension - 1
 
-    return prefix_sum_grid[point.x + dimension + 1][point.y + dimension + 1] \
-           - prefix_sum_grid[point.x][point.y + dimension + 1] \
-           - prefix_sum_grid[point.x + dimension + 1][point.y] \
-           + prefix_sum_grid[point.x][point.y]
-
-    # for x in range(0, dimension):
-    #     for y in range(0, dimension):
-    #         value += prefix_sum_grid[point.x + x][point.y + y]
-    #
-    # return value
+    return prefix_sum_grid[point.x + _dim][point.y + _dim] \
+           - prefix_sum_grid[point.x + _dim][point.y - 1] \
+           - prefix_sum_grid[point.x - 1][point.y + _dim] \
+           + prefix_sum_grid[point.x - 1][point.y - 1]
 
 
 def solve_11(serial_number, min_dimension=3, max_dimension=3):
@@ -72,14 +71,16 @@ def solve_11(serial_number, min_dimension=3, max_dimension=3):
                     max_value_found = value
                     coord = Point(x, y)
                     best_dimension = dimension
-                    print('{},{},{}'.format(x, y, dimension))
+                    # print('{},{},{}'.format(x, y, dimension))
 
     return coord, best_dimension
 
 
 if __name__ == '__main__':
     r, dim = solve_11(1788, 3, 3)
-    print('{}, {}'.format(r.x, r.y))
+    print('Part 1: {}, {}'.format(r.x, r.y))
+    # part 1: 235,35
 
     r, d = solve_11(1788, 1, GRID_SIZE)
-    print('{},{},{}'.format(r.x, r.y, d))
+    print('Part 2: {},{},{}'.format(r.x, r.y, d))
+    # part 2: 142,265,7
