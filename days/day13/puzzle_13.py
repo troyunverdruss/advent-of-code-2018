@@ -1,5 +1,5 @@
 from collections import deque
-from helpers.helpers import read_raw_entries, Point, path
+from helpers import read_raw_entries, Point, path
 import copy
 
 class Cell:

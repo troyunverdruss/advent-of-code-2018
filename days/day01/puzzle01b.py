@@ -1,4 +1,4 @@
-from helpers.helpers import read_numeric_entries, path
+from helpers import read_numeric_entries, path
 
 
 class CurrentFreq:

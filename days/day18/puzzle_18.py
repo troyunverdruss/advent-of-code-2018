@@ -1,7 +1,7 @@
 from collections import Counter
 from typing import Dict
 
-from helpers.helpers import read_raw_entries, Point, get_min_max, path
+from helpers import read_raw_entries, Point, get_min_max, path
 
 
 def print_state(time_id, grid):

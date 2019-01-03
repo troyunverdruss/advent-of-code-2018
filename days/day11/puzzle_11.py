@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from helpers.helpers import Point
+from helpers import Point
 
 GRID_SIZE = 300
 

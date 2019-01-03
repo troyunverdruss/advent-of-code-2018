@@ -1,8 +1,8 @@
 from collections import deque
 from copy import deepcopy
 
-from helpers.helpers import get_min_max, Point
-from days.day17.puzzle_17 import parse_real_input, print_state
+from helpers import get_min_max, Point
+from days.day17.puzzle_17 import parse_real_input
 
 
 def solve_17(points, still=False):

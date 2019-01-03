@@ -1,4 +1,4 @@
-from helpers.helpers import manhattan_distance, Point
+from helpers import manhattan_distance, Point
 import math
 from collections import deque
 

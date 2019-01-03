@@ -1,6 +1,5 @@
-from helpers.helpers import read_raw_entries
+from helpers import read_raw_entries
 import re
-import itertools
 
 
 class Sample:

@@ -1,6 +1,6 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
-from helpers.helpers import Point
+from helpers import Point
 from days.day22.puzzle_22 import solve_22_part_1, solve_22_part_2
 
 

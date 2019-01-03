@@ -1,4 +1,4 @@
-from helpers.helpers import read_raw_entries, manhattan_distance, Point, path
+from helpers import read_raw_entries, manhattan_distance, Point, path
 from typing import List
 
 

@@ -1,8 +1,7 @@
-from helpers.helpers import read_raw_entries, Point, get_min_max
+from helpers import read_raw_entries, Point, get_min_max
 from collections import deque
-import re
 from copy import deepcopy
-from anytree import Node, RenderTree, search as at_search
+from anytree import Node, search as at_search
 
 
 

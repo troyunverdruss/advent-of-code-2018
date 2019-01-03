@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append('/Users/troy/Documents/code/advent-of-code')
-from helpers.helpers import read_raw_entries, path
+from helpers import read_raw_entries, path
 import re
 
 

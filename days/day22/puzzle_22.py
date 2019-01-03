@@ -1,4 +1,4 @@
-from helpers.helpers import Point, read_raw_entries
+from helpers import Point, read_raw_entries
 import networkx as nx
 
 

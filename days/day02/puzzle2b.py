@@ -1,4 +1,4 @@
-from helpers.helpers import read_raw_entries, path
+from helpers import read_raw_entries, path
 
 
 def is_diff_one(a, b):

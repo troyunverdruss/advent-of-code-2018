@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from days.day23.puzzle_23 import parse_input, solve_23, solve_23_part_2
-from helpers.helpers import path
+from helpers import path
 
 
 class TestSolve_23(TestCase):

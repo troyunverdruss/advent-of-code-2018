@@ -1,6 +1,6 @@
 from unittest import TestCase
 from days.day11.puzzle_11 import solve_11, compute_cell
-from helpers.helpers import Point
+from helpers import Point
 
 
 class TestSolve_11(TestCase):
