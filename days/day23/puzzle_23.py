@@ -1,6 +1,6 @@
 import re
 from typing import List, Tuple
-from helpers.helpers import Point3d, read_raw_entries, manhattan_distance_3d, path
+from helpers import Point3d, read_raw_entries, manhattan_distance_3d, path
 
 import z3
 

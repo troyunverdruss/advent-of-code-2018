@@ -1,4 +1,4 @@
-from helpers.helpers import read_raw_entries
+from helpers import read_raw_entries
 from collections import deque
 
 

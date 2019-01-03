@@ -1,6 +1,6 @@
 from unittest import TestCase
 from days.day13.puzzle_13 import solve_13
-from helpers.helpers import path
+from helpers import path
 
 
 class TestSolve_13(TestCase):

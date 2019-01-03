@@ -2,7 +2,7 @@ from unittest import TestCase, skip
 
 from days.day15.puzzle_15 import solve_15, parse_map, sort_fighters, print_state, \
     find_accessible_areas_from_point, fill_temp_map
-from helpers.helpers import read_raw_entries, Point, path
+from helpers import read_raw_entries, Point, path
 
 
 class Path:

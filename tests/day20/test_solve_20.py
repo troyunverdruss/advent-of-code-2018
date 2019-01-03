@@ -2,7 +2,7 @@ import re
 from unittest import TestCase, skip
 import networkx as nx
 
-from helpers.helpers import Point
+from helpers import Point
 from days.day20.puzzle_20 import solve_20
 
 

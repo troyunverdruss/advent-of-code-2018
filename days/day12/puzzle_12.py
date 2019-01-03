@@ -1,9 +1,8 @@
 from collections import deque
-from helpers.helpers import read_raw_entries, path
-from typing import List, Dict, Tuple
+from helpers import read_raw_entries, path
+from typing import Dict, Tuple
 import re
 import sys
-from copy import deepcopy
 
 
 class Pot:

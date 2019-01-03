@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from days.day25.puzzle_25 import solve_25, parse_input
 
-from helpers.helpers import path
+from helpers import path
 
 
 class TestSolve_25(TestCase):

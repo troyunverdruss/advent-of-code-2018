@@ -1,4 +1,4 @@
-from helpers.helpers import read_raw_entries, Point, manhattan_distance, path
+from helpers import read_raw_entries, Point, path
 from copy import deepcopy
 import networkx as nx
 

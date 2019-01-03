@@ -1,5 +1,4 @@
-from helpers.helpers import read_raw_entries
-from collections import deque
+from helpers import read_raw_entries
 
 
 def solve_2a(entries):

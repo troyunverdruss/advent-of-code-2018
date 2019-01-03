@@ -3,7 +3,7 @@ from typing import List
 from itertools import combinations
 import anytree
 
-from helpers.helpers import Point4d, manhattan_distance_4d, read_raw_entries, path
+from helpers import Point4d, manhattan_distance_4d, read_raw_entries, path
 
 id = 0
 

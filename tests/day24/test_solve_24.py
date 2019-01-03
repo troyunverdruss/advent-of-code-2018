@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from helpers.helpers import read_raw_entries, path
+from helpers import read_raw_entries, path
 from days.day24.puzzle_24 import solve_24, parse_input, ArmyGroup
 
 

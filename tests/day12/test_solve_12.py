@@ -1,5 +1,5 @@
 from unittest import TestCase
-from helpers.helpers import read_raw_entries, path
+from helpers import read_raw_entries, path
 from days.day12.puzzle_12_try_2 import solve_12 as solve_12_good
 
 

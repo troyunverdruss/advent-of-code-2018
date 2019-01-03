@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from helpers.helpers import read_raw_entries, Point, path
+from helpers import read_raw_entries, Point, path
 from days.day17.puzzle_17 import parse_real_input
 from days.day17.puzzle_17_try_2 import solve_17
 

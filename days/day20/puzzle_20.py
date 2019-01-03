@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import networkx as nx
 
-from helpers.helpers import read_raw_entries, Point, path
+from helpers import read_raw_entries, Point, path
 
 
 class StartPoint:
