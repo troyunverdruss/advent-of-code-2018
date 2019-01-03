@@ -15,7 +15,7 @@ def solve_1(input, offset=1):
 
 
 if __name__ == '__main__':
-    input = read_raw_entries(__file__, 'input.txt')[0].strip()
+    input = read_raw_entries('input.txt')[0].strip()
     r = solve_1(input)
     print(r)
 
