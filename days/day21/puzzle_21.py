@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('/Users/troy/Documents/code/advent-of-code')
+sys.path.append('/Users/troy/Documents/code/advent-of-code-2018')
 from days.day16.puzzle_16 import *
 from days.day19.puzzle_19 import Operation
 

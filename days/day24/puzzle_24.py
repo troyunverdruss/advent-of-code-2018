@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('/Users/troy/Documents/code/advent-of-code')
+sys.path.append('/Users/troy/Documents/code/advent-of-code-2018')
 from helpers import read_raw_entries, path
 import re
 
